@@ -3,6 +3,7 @@
     "express": "^4.18.2",
     "seneca": "^3.29.0",
     "seneca-entity": "^18.4.0",
+    "seneca-mongo-store": "^5.0.1",
     "seneca-web": "^2.2.2",
     "seneca-web-adapter-express": "^1.2.1"
   }
