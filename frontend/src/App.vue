@@ -1,25 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <NavigatorComponent/>
+  <WriterComponent/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavigatorComponent from './components/Navigator.vue'
+import WriterComponent from './components/Writer.vue'
+// import Library from './components/Library.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavigatorComponent,
+    WriterComponent,
+    // Library,
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  font-family: LXGW WenKai Lite;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
 }
