@@ -11,6 +11,7 @@
     "codemirror-editor-vue3": "^2.1.7",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
+    "vue-flex-waterfall": "^2.1.0",
     "vue-showdown": "^4.0.0"
   },
   "devDependencies": {
