@@ -47,6 +47,7 @@ export default {
                 indentUnit: 4,
                 styleActiveLine: true,
                 matchBrackets: true,
+                lineWrapping: true,
             },
         }
     },
@@ -75,7 +76,7 @@ a {
     margin: 20px;
     padding: 20px;
     height: 200px;
-    width: 45%;
+    width: 46%;
 }
 .hello-word {
     position: absolute;
@@ -101,11 +102,15 @@ a {
     left: 10px;
     right: 10px;
     bottom: 10px;
-    overflow: auto;
-    border: solid 1px;
+    overflow: scroll;
+    border: solid 1px green;
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .codemirror-container {
     font-size: 16px;
+    font-family: LXGW WenKai Screen R;
 }
 #preview-button {
     position: absolute;
