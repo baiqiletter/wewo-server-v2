@@ -7,13 +7,22 @@
             <a href="">切换视图</a>
         </div>
         <div class="note-editor" v-if="!to_preview">
-            <Codemirror
+            <!-- <Codemirror
                 v-model:value="note_content"
                 :options="cmOptions"
                 border
                 placeholder="test placeholder"
                 @change="note_change"
-            />
+            /> -->
+            <v-md-editor
+                v-model="note_content"
+                mode="edit"
+                height='190px'
+                left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code"
+                right-toolbar="preview toc fullscreen"
+                :disabled-menus="[]"
+            >
+            </v-md-editor>
         </div>
         <div class="note-preview" v-if="to_preview">
             <VueShowdown
@@ -22,16 +31,16 @@
             />
         </div>
         <div class="note-buttons">
-            <button id="preview-button" @click="note_preview">预览</button>
+            <!-- <button id="preview-button" @click="note_preview">预览</button> -->
             <button id="send-button" href="">放入卡片盒</button>
         </div>
     </div>
 </template>
 
 <script>
-import Codemirror from "codemirror-editor-vue3"
-import "codemirror/mode/markdown/markdown.js"
-import "codemirror/theme/neat.css"
+// import Codemirror from "codemirror-editor-vue3"
+// import "codemirror/mode/markdown/markdown.js"
+// import "codemirror/theme/neat.css"
 
 export default {
     name: 'WriterComponent',
@@ -59,7 +68,7 @@ export default {
             this.to_preview = !this.to_preview
         }
     },
-    components: { Codemirror },
+    // components: { Codemirror },
 }
 </script>
 
@@ -107,10 +116,6 @@ a {
     border-radius: 4px;
     padding-left: 10px;
     padding-right: 10px;
-}
-.codemirror-container {
-    font-size: 16px;
-    font-family: LXGW WenKai Screen R;
 }
 #preview-button {
     position: absolute;

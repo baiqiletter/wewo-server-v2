@@ -7,9 +7,7 @@
             :break-at="{ 600: 2, 300: 1}"
         >
             <div class="card-container" v-for="(item,index) in cards" :key="index">
-                <VueShowdown
-                    v-bind:markdown="item"
-                />
+                <v-md-editor :model-value="item" mode="preview"></v-md-editor>
             </div>
         </VueFlexWaterfall>
     </div>
@@ -30,6 +28,7 @@ export default {
                 '7月16日\n胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？\n子曰：“吾日三省吾身。”...不能再这样下去了！',
                 '7月17日\n打牌。',
                 '7月18日\n打牌。',
+                '![image.png](https://realenet-1301408934.cos.ap-nanjing.myqcloud.com/markdown/material/zhishiku/material/1660791733099/1/image.png)',
                 '七月四日\n读Plato’s Apology of Socrates。今日为美国独立纪念日，夜八时至湖上观此间庆祝会。士女来游者无算，公园中百戏俱陈，小儿女燃花爆为乐。既而焰火作矣，五光十色，备极精巧。九时半始归。',
                 '七月十三日\n上课。读《陶渊明诗》一卷。',
                 '七月十四日\n化学第一小试。读拉丁文。夜游公园，适天微雨，众皆避入跳舞厅内。已而乐作，有男女约二十双，双双跳舞。此为余见跳舞之第一次，故记之。',
@@ -65,9 +64,8 @@ a {
     overflow: auto;
 }
 .card-container {
-    border: solid;
+    border: solid 2px;
     margin-bottom: 20px;
     width: 30%;
-    padding: 5px;
 }
 </style>

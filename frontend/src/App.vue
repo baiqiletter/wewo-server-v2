@@ -1,7 +1,7 @@
 <template>
   <NavigatorComponent/>
-  <WriterComponent/>
   <LibraryComponent/>
+  <WriterComponent/>
 </template>
 
 <script>
