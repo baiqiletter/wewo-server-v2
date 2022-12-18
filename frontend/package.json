@@ -13,7 +13,8 @@
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-flex-waterfall": "^2.1.0",
-    "vue-showdown": "^4.0.0"
+    "vue-showdown": "^4.0.0",
+    "vue3-calendar-heatmap": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

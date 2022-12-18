@@ -9,10 +9,15 @@
             <p>胡适（<a>登出</a>）</p>
         </div>
         <div class="heatmap_calendar">
-            <p>热力图</p>
-            <p>热力图</p>
-            <p>热力图</p>
-            <p>热力图</p>
+            <!-- <calendar-heatmap 
+                :values="calendar_nums" 
+                :end-date="end_date"
+                :round="0"
+                :dark-mode="false"
+                :range-color="['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']"
+                :max="10"
+                :no-data-text="这一天没有写东西哦"
+            /> -->
         </div>
         <hr/>
         <div class="pinned">
@@ -33,10 +38,23 @@
 </template>
 
 <script>
+// import { CalendarHeatmap } from 'vue3-calendar-heatmap'
+
 export default {
     name: 'NavigatorComponent',
+    data() {
+        return {
+            // calendar_nums: [
+            //     { date: '2022-12-16', count: 6 }, { date: '2022-12-17', count: 3 }, { date: '2022-12-18', count: 5 }
+            // ],
+            // end_date: new Date('2022-12-31'),
+        }
+    },
     props: {
         // msg: String
+    },
+    components: {
+        // CalendarHeatmap,
     }
 }
 </script>
