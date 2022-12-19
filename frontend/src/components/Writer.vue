@@ -6,7 +6,7 @@
         <div class="change-view">
             <a href="">切换视图</a>
         </div>
-        <div class="note-editor" v-if="!to_preview">
+        <div class="note-editor">
             <!-- <Codemirror
                 v-model:value="note_content"
                 :options="cmOptions"
@@ -24,12 +24,6 @@
             >
             </v-md-editor>
         </div>
-        <div class="note-preview" v-if="to_preview">
-            <VueShowdown
-                v-bind:markdown="note_content"
-                v-model="note_content"
-            />
-        </div>
         <div class="note-buttons">
             <!-- <button id="preview-button" @click="note_preview">预览</button> -->
             <button id="send-button" href="">放入卡片盒</button>
@@ -46,7 +40,6 @@ export default {
     name: 'WriterComponent',
     data() {
         return {
-            to_preview: false,
             note_content: '*我有些想法......*',
             cmOptions: {
                 mode: "text/markdown",
@@ -64,11 +57,7 @@ export default {
         note_change() {
             console.log(this.note_content)
         },
-        note_preview() {
-            this.to_preview = !this.to_preview
-        }
     },
-    // components: { Codemirror },
 }
 </script>
 
