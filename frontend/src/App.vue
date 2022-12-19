@@ -1,13 +1,7 @@
 <template>
-	<NavigatorComponent
-		v-model:logged_in="is_login"
-	/>
-	<LibraryComponent
-		v-model:logged_in="is_login"
-	/>
-	<WriterComponent
-		v-model:logged_in="is_login"
-	/>
+	<NavigatorComponent />
+	<LibraryComponent />
+	<WriterComponent />
 </template>
 
 <script>
@@ -22,11 +16,6 @@ export default {
 		WriterComponent,
 		LibraryComponent,
 	},
-	setup() {
-		return {
-			logged_in: false,
-		}
-	}
 }
 </script>
 
