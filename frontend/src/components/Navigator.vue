@@ -5,10 +5,10 @@
             <p>基于微服务架构的双链笔记应用</p>
             <hr/>
         </div>
-        <div class="user_info">
+        <div class="user-info">
             <p>胡适（<a>登出</a>）</p>
         </div>
-        <div class="heatmap_calendar">
+        <div class="heatmap-calendar">
             <!-- <calendar-heatmap 
                 :values="calendar_nums" 
                 :end-date="end_date"
@@ -28,17 +28,15 @@
                 <li>留学日记第3篇</li>
             </ul>
         </div>
-        <div class="recent">
-            <h3>最近</h3>
-            <ul>
-                <li>留学日记第4篇</li>
-            </ul>
+        <div class="graph-container">
+            <div ref="graph" id="graph"></div>
         </div>
     </div>
 </template>
 
 <script>
 // import { CalendarHeatmap } from 'vue3-calendar-heatmap'
+import ForceGraph from 'force-graph'
 
 export default {
     name: 'NavigatorComponent',
@@ -48,13 +46,41 @@ export default {
             //     { date: '2022-12-16', count: 6 }, { date: '2022-12-17', count: 3 }, { date: '2022-12-18', count: 5 }
             // ],
             // end_date: new Date('2022-12-31'),
+            graph: null,
+            graph_data: {  // test data
+                nodes: [
+                    { id: "6399c7bbfe5e0b1ee272cfb7", name: "测试", val: 1 },
+                    { id: "6399d84192b59d475cc41195", name: "留学日记", val: 1 },
+                    { id: "639ae195edb0c50919926013", name: "留学日记", val: 1 },
+                    { id: "639ae195edb0c50919926012", name: "留学日记", val: 1 },
+                    { id: "639ae4e76265b20d24978e94", name: "留学日记", val: 1 },
+                ],
+                links: [
+                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "6399d84192b59d475cc41195" },
+                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae195edb0c50919926013" },
+                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae195edb0c50919926012" },
+                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae4e76265b20d24978e94" },
+                ],
+            },
         }
     },
-    props: {
-        // msg: String
+    mounted() {
+        this.initGraph2D()
     },
-    components: {
-        // CalendarHeatmap,
+    methods: {
+        async initGraph2D() {
+            this.graph = ForceGraph()(this.$refs.graph)
+                .graphData(this.graph_data)
+                .width(this.$refs.graph.parentElement.offsetWidth)
+                .height(this.$refs.graph.parentElement.offsetWidth)
+                .nodeAutoColorBy('id')
+                .onNodeClick(node => {
+                    // Center/zoom on node
+                    this.graph.centerAt(node.x, node.y, 1000);
+                    // this.graph.zoom(2, 1000);
+                })
+                // .onNodeClick(node => window.open(`https://bl.ocks.org/${node.user}/${node.id}`, '_blank'))
+        },
     }
 }
 </script>
@@ -74,6 +100,11 @@ a {
     padding: 20px;
     width: 15%;
     overflow: auto;
+}
+.graph-container {
+    width: 100%;
+    border-radius: 2px;
+    border: solid 1px;
 }
 </style>
   
