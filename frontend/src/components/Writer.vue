@@ -4,16 +4,9 @@
             不写，就无法思考。————「卢曼卡片盒笔记写作法」
         </div>
         <div class="change-view">
-            <a href="">切换视图</a>
+            <a>切换视图</a>
         </div>
         <div class="note-editor">
-            <!-- <Codemirror
-                v-model:value="note_content"
-                :options="cmOptions"
-                border
-                placeholder="test placeholder"
-                @change="note_change"
-            /> -->
             <v-md-editor
                 v-model="note_content"
                 mode="edit"
@@ -26,16 +19,12 @@
         </div>
         <div class="note-buttons">
             <!-- <button id="preview-button" @click="note_preview">预览</button> -->
-            <button id="send-button" href="">放入卡片盒</button>
+            <button id="send-button" ref="send_button" href="">放入卡片盒</button>
         </div>
     </div>
 </template>
 
 <script>
-// import Codemirror from "codemirror-editor-vue3"
-// import "codemirror/mode/markdown/markdown.js"
-// import "codemirror/theme/neat.css"
-
 export default {
     name: 'WriterComponent',
     data() {

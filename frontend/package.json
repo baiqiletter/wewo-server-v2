@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@kangc/v-md-editor": "^2.3.15",
+    "axios": "^1.2.1",
     "codemirror-editor-vue3": "^2.1.7",
     "core-js": "^3.8.3",
     "d3": "^7.7.0",

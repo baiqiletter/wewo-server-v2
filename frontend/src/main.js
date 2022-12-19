@@ -10,12 +10,18 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
 import Prism from 'prismjs';
 
+import axios from 'axios';
+
 VueMarkdownEditor.use(vuepressTheme, {
     Prism,
 });
 
 
-createApp(App)
+const app = createApp(App)
     .use(GlobalCmComponent)
     .use(VueMarkdownEditor)
-    .mount('#app')
+app.mount('#app')
+app.config.globalProperties.$axios = axios.create({
+    baseURL: 'http://localhost:8080',
+    timeout: 3000
+})

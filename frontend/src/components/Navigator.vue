@@ -6,7 +6,18 @@
             <hr/>
         </div>
         <div class="user-info">
-            <p>胡适（<a>登出</a>）</p>
+            <div ref="login_container" v-if="!this.is_login">
+                <p>用户：<input v-model="this.username" type="text" maxlength="16"/></p>
+                <p>密码：<input v-model="this.password" type="password" maxlength="16"/></p>
+                <button @click="login">登入</button> <button @click="signup">注册</button>
+                <div v-if="fail_not_empty">用户或密码不能为空</div>
+                <div v-if="fail_wrong_info">登入失败，用户名或密码错误</div>
+                <div v-if="success_login">登入成功</div>
+                <div v-if="success_signup">注册成功</div>
+            </div>
+            <div ref="user_info" v-if="this.is_login">
+                <p>{{ this.username }}（<a @click="logout">登出</a>）</p>
+            </div>
         </div>
         <div class="heatmap-calendar">
             <!-- <calendar-heatmap 
@@ -40,6 +51,12 @@ import ForceGraph from 'force-graph'
 
 export default {
     name: 'NavigatorComponent',
+    props: {
+        logged_in: Boolean,
+    },
+    emits: [
+        'update:logged_in',
+    ],
     data() {
         return {
             // calendar_nums: [
@@ -62,6 +79,13 @@ export default {
                     { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae4e76265b20d24978e94" },
                 ],
             },
+            is_login: false,
+            username: "",
+            password: "",
+            fail_not_empty: false,
+            fail_wrong_info: false,
+            success_login: false,
+            success_signup: false,
         }
     },
     mounted() {
@@ -81,6 +105,36 @@ export default {
                 })
                 // .onNodeClick(node => window.open(`https://bl.ocks.org/${node.user}/${node.id}`, '_blank'))
         },
+        login() {
+            if (this.username == "" || this.password == "") {
+                this.fail_not_empty = true
+            }
+            else {
+                // TODO: 发送登陆请求...
+                this.success_login = true
+                this.is_login = true
+                this.fail_not_empty = false
+                this.fail_wrong_info = false
+            }
+        },
+        signup() {
+            if (this.username == "" || this.password == "") {
+                this.fail_not_empty = true
+            }
+            else {
+                // TODO: 发送注册请求...
+                this.success_signup = true
+                this.fail_not_empty = false
+                this.fail_wrong_info = false
+            }
+        },
+        logout() {
+            this.is_login = false
+            this.success_login = false
+            this.success_signup = false
+            this.fail_not_empty = false
+            this.fail_wrong_info = false
+        }
     }
 }
 </script>
