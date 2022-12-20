@@ -17,16 +17,20 @@ function graph(options) {
 
         // 需要验证条目是否已存在，存在则为更新，否则为新建
         // 是否应该同时保存笔记的id和标题（用于在图谱中显示）？不需要，因为图谱的节点和链接数据是分开的，graph_service只负责链接部分
-        this.make('graph_db').data$(link_data).save$((err, data) => {
+        this.make('graph_db').load$({ note: link_data.note }, (err, data) => {
             console.log('\n[receive] update note links : ' + link_data.note + ' -> ' + link_data.linked_notes.length)
-            // 返回该笔记的所有出链，再次查询以确保结果已写入
-            // this.make('graph_db').load$({ note: link_data.note }, (err, data) => {
-            //     respond(err, {
-            //         note: data.note,
-            //         linked_notes: data.linked_notes
-            //     })
-            // })
-            respond(err, null)
+            if (data) {  // 已存在，更新现有数据（先删除后新建）
+                this.make('graph_db').remove$({ note: link_data.note }, (err, data) => {
+                    this.make('graph_db').data$(link_data).save$((err, data) => {
+                        respond(err, null)
+                    })
+                })
+            }
+            else {  // 不存在，新建条目
+                this.make('graph_db').data$(link_data).save$((err, data) => {
+                    respond(err, null)
+                })
+            }
         })
     })
 
@@ -48,7 +52,7 @@ function graph(options) {
 
         this.make('graph_db').list$({ author: username }, (err, data) => {
             console.log('\n[receive] get links of all ' + data.length + ' notes of ' + username)
-            console.log(data)
+            // console.log(data)
             var result = []
             for (var i = 0; i < data.length; i++) {
                 result.push({

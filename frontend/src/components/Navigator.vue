@@ -108,7 +108,6 @@ export default {
     mounted() {
         EventBus.on('update_data', () => {
             this.update_notes()
-            this.update_links()
         })
 
         EventBus.on('create_note', (data) => {
@@ -123,13 +122,7 @@ export default {
             .then((response) => {
                 var note_id = response.data.id
                 // 解析该笔记的出链
-                var patt = /\[#id:\S+?]/g
-                var linked_notes = []
-                var match
-                while((match = patt.exec(data.content)) != null) {
-                    linked_notes.push(match[0].substring(5, match[0].length - 1))
-                }
-                // console.log(linked_notes)
+                var linked_notes = this.parse_links(data.content)
                 // 更新该笔记的图谱
                 axios.post(
                     '/graph/update',
@@ -160,8 +153,24 @@ export default {
                     content: data.content,
                 }
             )
-            .then(() => {
-                this.update_notes()
+            .then((response) => {
+                var note_id = response.data.id
+                // 解析该笔记的出链
+                var linked_notes = this.parse_links(data.content)
+                // 更新该笔记的图谱
+                axios.post(
+                    '/graph/update',
+                    {
+                        note: note_id,
+                        linked_notes: linked_notes,
+                        author: this.username
+                    }
+                ).then(() => {
+                    this.update_notes()
+                }).catch((error) => {
+                    console.log(error)
+                })
+                // this.update_notes()
             })
             .catch((error) => {
                 console.log(error)
@@ -339,6 +348,16 @@ export default {
 
             this.initGraph2D()
         },
+        parse_links(note) {
+            // 解析该笔记的出链
+            var patt = /\[#id:\S+?]/g
+            var linked_notes = []
+            var match
+            while((match = patt.exec(note)) != null) {
+                linked_notes.push(match[0].substring(5, match[0].length - 1))
+            }
+            return linked_notes
+        }
     }
 }
 </script>
