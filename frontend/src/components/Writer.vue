@@ -14,6 +14,7 @@
                 left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code"
                 right-toolbar="preview toc fullscreen"
                 :disabled-menus="[]"
+                :autofocus="true"
             >
             </v-md-editor>
         </div>
@@ -37,16 +38,6 @@ export default {
     data() {
         return {
             note_content: '*我有些想法......*',
-            cmOptions: {
-                mode: "text/markdown",
-                theme: "neat",  
-                lineNumbers: false,
-                smartIndent: true,
-                indentUnit: 4,
-                styleActiveLine: true,
-                matchBrackets: true,
-                lineWrapping: true,
-            },
             login_state: false,
         }
     },
@@ -55,11 +46,14 @@ export default {
             console.log(this.note_content)
         },
         send_note() {
-            console.log('send note clicked')
+            var linebreak_index = this.note_content.indexOf('\n')
+            var note_title = this.note_content.substring(0, linebreak_index)
             if (this.login_state) {
-                // TODO: 发送新增笔记的请求
-                // 通过消息机制通知NavigatorComponent请求新笔记数据，该组件无需所有数据
-                EventBus.emit('update_data')
+                EventBus.emit('create_note', {
+                    title: note_title,
+                    content: this.note_content
+                })
+                this.note_content = '*我有些想法......*'
             }
             else {
                 alert('请先在左侧登入。')

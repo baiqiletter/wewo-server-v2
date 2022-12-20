@@ -107,9 +107,26 @@ export default {
     },
     mounted() {
         EventBus.on('update_data', () => {
-            console.log('update_data')
             this.update_notes()
             this.update_links()
+        })
+
+        EventBus.on('create_note', (data) => {
+            axios.post(
+                '/note/create',
+                {
+                    title: data.title,
+                    author: this.username,
+                    content: data.content,
+                }
+            )
+            .then(() => {
+                this.update_notes()
+                this.update_links()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         })
 
         EventBus.emit('update_login_state', this.login_state)

@@ -27,11 +27,8 @@ export default {
     },
     mounted() {
         EventBus.on('update_library', (data) => {
-            console.log('update_library')
             this.cards = data.notes
             this.links = data.links
-            console.log(data.notes)
-            console.log(this.cards)
         })
     },
     methods: {
