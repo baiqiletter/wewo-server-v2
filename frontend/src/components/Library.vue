@@ -6,9 +6,22 @@
             col-spacing="15"
             :break-at="{ 600: 2, 300: 1}"
         >
-            <div class="card-container" v-for="(item,index) in cards" :key="index" @click.right="this.focus_note(item)" @click.right.prevent>
+            <div 
+                class="card-container" 
+                v-for="(item,index) in cards" 
+                :key="index" 
+                @click.right="this.focus_note(item)" 
+                @click.right.prevent
+            >
                 <v-md-editor :model-value="item.content" mode="preview"></v-md-editor>
                 <p class="card-id" v-if="this.display_ids">id:{{item.id}}</p>
+                <button 
+                    class="card-delete" 
+                    v-if="this.display_delete_cards"
+                    @click="this.try_delete_card(item)"
+                >
+                    X
+                </button>
             </div>
         </VueFlexWaterfall>
     </div>
@@ -25,6 +38,7 @@ export default {
             cards: [],
             links: [],
             display_ids: true,
+            display_delete_cards: false,
         }
     },
     mounted() {
@@ -35,11 +49,17 @@ export default {
         EventBus.on('toggle_display_ids', (data) => {
             this.display_ids = data
         })
+        EventBus.on('toggle_display_delete', (data) => {
+            this.display_delete_cards = data
+        })
     },
     methods: {
         focus_note(data) {
             EventBus.emit('focus_note', data)
-        }
+        },
+        try_delete_card(item) {
+            EventBus.emit('delete_note', item)
+        },
     },
     components: {
         VueFlexWaterfall,
@@ -64,6 +84,7 @@ a {
     overflow: auto;
 }
 .card-container {
+    position: relative;
     border: solid 2px;
     margin-bottom: 20px;
     width: 30%;
@@ -77,5 +98,11 @@ a {
     font-size: 12px;
     color: lightgrey;
     direction: rtl;
+}
+.card-delete {
+    position: absolute;
+    z-index: 10;
+    left: 3px;
+    bottom: 3px;
 }
 </style>

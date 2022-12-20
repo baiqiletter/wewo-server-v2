@@ -36,6 +36,9 @@
             <a @click="this.toggle_display_ids" v-if="this.display_ids">切换卡片ID显示（<b>Y</b>/N）</a>
             <a @click="this.toggle_display_ids" v-if="!this.display_ids">切换卡片ID显示（Y/<b>N</b>）</a>
             <br />
+            <a @click="this.toggle_display_delete" v-if="this.display_card_delete">切换卡片删除显示（<b>Y</b>/N）</a>
+            <a @click="this.toggle_display_delete" v-if="!this.display_card_delete">切换卡片删除显示（Y/<b>N</b>）</a>
+            <br />
             <a>按时间排序（<b>Y</b>/N)</a>
         </div>
         <div class="graph-container">
@@ -110,6 +113,7 @@ export default {
             notes: [ { id:'0000', title: '当前没有笔记', content: '当前没有笔记\n请先登陆' } ],
             links: [],
             display_ids: true,
+            display_card_delete: false,
         }
     },
     mounted() {
@@ -151,6 +155,20 @@ export default {
                 this.update_links()
             })
             .catch((error) => {
+                console.log(error)
+            })
+        })
+
+        EventBus.on('delete_note', (data) => {
+            axios.post(
+                '/note/delete',
+                {
+                    id: data.id,
+                }
+            ).then(() => {
+                this.update_notes()
+                this.update_links()
+            }).catch((error) => {
                 console.log(error)
             })
         })
@@ -270,6 +288,10 @@ export default {
         toggle_display_ids() {
             this.display_ids = !this.display_ids
             EventBus.emit('toggle_display_ids', this.display_ids)
+        },
+        toggle_display_delete() {
+            this.display_card_delete = !this.display_card_delete
+            EventBus.emit('toggle_display_delete', this.display_card_delete)
         }
     }
 }
