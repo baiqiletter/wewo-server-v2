@@ -3,9 +3,13 @@
         <div class="hello-word">
             不写，就无法思考。————「卢曼卡片盒笔记写作法」
         </div>
-        <div class="change-view">
-            <a>切换视图</a>
+        <div class="editing-info">
+            <span v-if="this.note_id!=''">你正在写编号为{{this.note_id}}的卡片</span>
+            <span v-else>你将写一张新卡片</span>
         </div>
+        <!-- <div class="change-view">
+            <a>切换视图</a>
+        </div> -->
         <div class="note-editor">
             <v-md-editor
                 v-model="note_content"
@@ -14,7 +18,6 @@
                 left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code"
                 right-toolbar="preview toc fullscreen"
                 :disabled-menus="[]"
-                :autofocus="true"
             >
             </v-md-editor>
         </div>
@@ -37,6 +40,7 @@ export default {
     },
     data() {
         return {
+            note_id: "",
             note_content: '*我有些想法......*',
             login_state: false,
         }
@@ -83,6 +87,11 @@ a {
     top: 10px;
     left: 10px;
     border-bottom: solid 1px;
+}
+.editing-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 .change-view {
     position: absolute;

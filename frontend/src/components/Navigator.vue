@@ -17,7 +17,7 @@
                 <div v-if="success_signup">注册成功</div>
             </div>
             <div ref="user_info" v-if="this.login_state">
-                <p>{{ this.username }}（<a @click="logout">登出</a>）</p>
+                <p>{{ this.username }}（<a @click="logout">登出</a>），一共有{{ this.notes.length }}张卡片</p>
             </div>
         </div>
         <div class="heatmap-calendar">
@@ -31,7 +31,11 @@
                 :no-data-text="这一天没有写东西哦"
             /> -->
         </div>
-        <!-- <hr/> -->
+        <div class="view-container">
+            <h3>视图</h3>
+            <a @click="this.toggle_display_ids" v-if="this.display_ids">切换卡片ID显示（<b>Y</b>/N）</a>
+            <a @click="this.toggle_display_ids" v-if="!this.display_ids">切换卡片ID显示（Y/<b>N</b>）</a>
+        </div>
         <div class="graph-container">
             <h3>图谱</h3>
             <div ref="graph" id="graph"></div>
@@ -103,6 +107,7 @@ export default {
             // ],
             notes: [ { id:'0000', title: '当前没有笔记', content: '当前没有笔记\n请先登陆' } ],
             links: [],
+            display_ids: true,
         }
     },
     mounted() {
@@ -240,6 +245,10 @@ export default {
         },
         update_links() {
 
+        },
+        toggle_display_ids() {
+            this.display_ids = !this.display_ids
+            EventBus.emit('toggle_display_ids', this.display_ids)
         }
     }
 }
