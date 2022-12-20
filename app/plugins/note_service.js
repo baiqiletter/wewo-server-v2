@@ -8,7 +8,7 @@ function note_service( options ) {
             prefix: '/note',
             pin:    'service:note_service, cmd:*',
             map: {
-                get: { GET: true },
+                get: { GET: true, suffix: '/:id' },
                 create: { POST: true },
                 update: { POST: true },
                 delete: { POST: true },

@@ -10,6 +10,7 @@
                 class="card-container" 
                 v-for="(item,index) in cards" 
                 :key="index" 
+                @click.left="this.copy_note_id(item)"
                 @click.right="this.focus_note(item)" 
                 @click.right.prevent
             >
@@ -59,6 +60,16 @@ export default {
         },
         try_delete_card(item) {
             EventBus.emit('delete_note', item)
+        },
+        copy_note_id(item) {
+            this.$copyText(item.id).then(
+                () => {
+                    console.log(item.id + ' copied to clipboard')
+                },
+                () => {
+                    console.log(item.id + ' copy failed to clipboard')
+                }
+            )
         },
     },
     components: {

@@ -1,12 +1,23 @@
 // 笔记服务插件
 function notes(options) {
+    // 模式：连通测试
+    this.add({service:'note_service', cmd:'ping'}, (msg, respond) => {
+        console.log('\n[receive] ping notes plugin, note_service\n')
+        respond(null, {response:'notes service is available', data:msg.data})
+    })
+
     // 模式：获取笔记
     this.add({service:'note_service', cmd:'get'}, (msg, respond) => {
-        var note_id = msg.args.query.id
+        var note_id = msg.args.params.id
         
         this.make('note_db').load$({ id: note_id }, (err, note) => {
-            console.log('\n[receive] get note by id : ' + note.id + '-' + note.title)
-            respond(err, { id: note.id, note: note })
+            console.log('\n[receive] get note by id : ' + note.id + ' - ' + note.title)
+            respond(err, {
+                id: note.id, 
+                title: note.title,
+                author: note.author,
+                content: note.content
+            })
         })
     })
 
@@ -19,7 +30,7 @@ function notes(options) {
         }
         
         this.make('note_db').data$(note_data).save$((err, note) => {
-            console.log('\n[receive] create note : ' + note.id + '-' + note.title)
+            console.log('\n[receive] create note : ' + note.id + ' - ' + note.title)
             respond(err, { id: note.id })
         })
     })
@@ -34,7 +45,7 @@ function notes(options) {
         }
 
         this.make('note_db').data$(note_data).save$((err, note) => {
-            console.log('\n[receive] update note : ' + note.id + '-' + note.title)
+            console.log('\n[receive] update note : ' + note.id + ' - ' + note.title)
             respond(err, { id: note.id })
         })
     })

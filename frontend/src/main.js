@@ -12,6 +12,8 @@ import Prism from 'prismjs';
 
 import axios from 'axios';
 
+import VueClipboard from 'vue-clipboard2';
+
 VueMarkdownEditor.use(vuepressTheme, {
     Prism,
 });
@@ -20,6 +22,7 @@ VueMarkdownEditor.use(vuepressTheme, {
 const app = createApp(App)
     .use(GlobalCmComponent)
     .use(VueMarkdownEditor)
+    .use(VueClipboard)
 app.mount('#app')
 app.config.globalProperties.$axios = axios.create({
     timeout: 3000
