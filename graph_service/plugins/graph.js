@@ -20,12 +20,13 @@ function graph(options) {
         this.make('graph_db').data$(link_data).save$((err, data) => {
             console.log('\n[receive] update note links : ' + link_data.note + ' -> ' + link_data.linked_notes.length)
             // 返回该笔记的所有出链，再次查询以确保结果已写入
-            this.make('graph_db').load$({ note: link_data.note }, (err, data) => {
-                respond(err, {
-                    note: data.note,
-                    linked_notes: data.linked_notes
-                })
-            })
+            // this.make('graph_db').load$({ note: link_data.note }, (err, data) => {
+            //     respond(err, {
+            //         note: data.note,
+            //         linked_notes: data.linked_notes
+            //     })
+            // })
+            respond(err, null)
         })
     })
 
@@ -47,6 +48,7 @@ function graph(options) {
 
         this.make('graph_db').list$({ author: username }, (err, data) => {
             console.log('\n[receive] get links of all ' + data.length + ' notes of ' + username)
+            console.log(data)
             var result = []
             for (var i = 0; i < data.length; i++) {
                 result.push({
@@ -54,6 +56,7 @@ function graph(options) {
                     linked_notes: data[i].linked_notes
                 })
             }
+            console.log(result)
             respond(err, result)
         })
     })

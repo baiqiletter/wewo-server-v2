@@ -11,6 +11,6 @@ var senecaWebConfig = {
 const seneca = require('seneca')()
     .use(SenecaWeb, senecaWebConfig)
     .use('entity')
-    .use(require('seneca-mongo-store'), { uri: 'mongodb://localhost:27017/note_db' })
+    .use(require('seneca-mongo-store'), { uri: 'mongodb://localhost:27017/graph_db' })
     .use('./plugins/graph')
     .listen({port:3003, type:'http'})

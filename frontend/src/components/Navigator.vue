@@ -120,8 +120,30 @@ export default {
                     content: data.content,
                 }
             )
-            .then(() => {
-                this.update_notes()
+            .then((response) => {
+                var note_id = response.data.id
+                // 解析该笔记的出链
+                var patt = /\[#id:\S+?]/g
+                var linked_notes = []
+                var match
+                while((match = patt.exec(data.content)) != null) {
+                    linked_notes.push(match[0].substring(5, match[0].length - 1))
+                }
+                // console.log(linked_notes)
+                // 更新该笔记的图谱
+                axios.post(
+                    '/graph/update',
+                    {
+                        note: note_id,
+                        linked_notes: linked_notes,
+                        author: this.username
+                    }
+                ).then(() => {
+                    this.update_notes()
+                }).catch((error) => {
+                    console.log(error)
+                })
+                // this.update_notes()
             })
             .catch((error) => {
                 console.log(error)
@@ -262,13 +284,6 @@ export default {
 
                     // 串联起来，以避免重复更新
                     this.update_links()
-                    // // 等待返回笔记数据后再更新卡片盒，以正确显示。
-                    // EventBus.emit('update_library', {
-                    //     notes: this.notes,
-                    //     links: this.links,
-                    // })
-
-                    // this.update_graph()
                 }).catch((err) => {
                     console.log(err)
                 })
