@@ -56,7 +56,7 @@ function notes(options) {
 
         this.make('note_db').remove$({ id: note_id }, (err, data) => {
             console.log('\n[receive] delete note : ' + note_id)
-            respond(err, null)
+            respond(err, { id: note_id })
         })
     })
 

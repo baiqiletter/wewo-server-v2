@@ -183,8 +183,21 @@ export default {
                 {
                     id: data.id,
                 }
-            ).then(() => {
-                this.update_notes()
+            ).then((response) => {
+                var note_id = response.data.id
+                // 更新该笔记的图谱
+                axios.post(
+                    '/graph/delete',
+                    {
+                        note: note_id,
+                        author: this.username
+                    }
+                ).then(() => {
+                    this.update_notes()
+                }).catch((error) => {
+                    console.log(error)
+                })
+                // this.update_notes()
             }).catch((error) => {
                 console.log(error)
             })
