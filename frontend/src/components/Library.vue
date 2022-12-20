@@ -6,7 +6,7 @@
             col-spacing="15"
             :break-at="{ 600: 2, 300: 1}"
         >
-            <div class="card-container" v-for="(item,index) in cards" :key="index">
+            <div class="card-container" v-for="(item,index) in cards" :key="index" @click.right="this.focus_note(item)" @click.right.prevent>
                 <v-md-editor :model-value="item.content" mode="preview"></v-md-editor>
                 <p class="card-id" v-if="this.display_ids">id:{{item.id}}</p>
             </div>
@@ -37,7 +37,9 @@ export default {
         })
     },
     methods: {
-        
+        focus_note(data) {
+            EventBus.emit('focus_note', data)
+        }
     },
     components: {
         VueFlexWaterfall,

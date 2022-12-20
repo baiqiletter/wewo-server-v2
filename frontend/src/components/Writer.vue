@@ -4,8 +4,8 @@
             不写，就无法思考。————「卢曼卡片盒笔记写作法」
         </div>
         <div class="editing-info">
-            <span v-if="this.note_id!=''">你正在写编号为{{this.note_id}}的卡片</span>
-            <span v-else>你将写一张新卡片</span>
+            <span v-if="this.note_id!=''">你正在写卡片#{{this.note_id}}</span>
+            <span v-else>你将写一张新卡片，也可以右键任意卡片以编辑</span>
         </div>
         <!-- <div class="change-view">
             <a>切换视图</a>
@@ -36,6 +36,10 @@ export default {
     mounted() {
         EventBus.on('update_login_state', (state) => {
             this.login_state = state
+        })
+        EventBus.on('focus_note', (note) => {
+            this.note_id = note.id
+            this.note_content = note.content
         })
     },
     data() {
