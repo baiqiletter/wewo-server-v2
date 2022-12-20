@@ -60,7 +60,7 @@ function graph(options) {
 
     // 模式：重新生成当前用户的所有链接
     this.add({service:'graph_service', cmd:'refresh'}, (msg, respond) => {
-        // { links: [ { note: id, linked_notes: [ids], author: user } ], author: user }
+        // { links: [ { note: id, linked_notes: [ids] } ], author: user }
         var links = msg.args.body.links
         var username = msg.args.body.author
 

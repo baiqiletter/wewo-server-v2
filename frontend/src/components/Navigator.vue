@@ -122,7 +122,6 @@ export default {
             )
             .then(() => {
                 this.update_notes()
-                this.update_links()
             })
             .catch((error) => {
                 console.log(error)
@@ -141,7 +140,6 @@ export default {
             )
             .then(() => {
                 this.update_notes()
-                this.update_links()
             })
             .catch((error) => {
                 console.log(error)
@@ -156,7 +154,6 @@ export default {
                 }
             ).then(() => {
                 this.update_notes()
-                this.update_links()
             }).catch((error) => {
                 console.log(error)
             })
@@ -201,7 +198,6 @@ export default {
                             this.login_state = true
 
                             this.update_notes()
-                            this.update_links()
 
                             EventBus.emit('update_login_state', this.login_state)
                         }
@@ -259,26 +255,43 @@ export default {
         },
         update_notes() {
             if (this.login_state) {
-                axios.get('/note/get_all',
-                    { params: { author: this.username, order: 'time_order' } })
-                    .then((response) => {
-                        this.notes = response.data
+                axios.get('/note/get_all', { params: { 
+                    author: this.username, order: 'time_order' 
+                }}).then((response) => {
+                    this.notes = response.data
 
-                        // 等待返回笔记数据后再更新卡片盒，以正确显示。
-                        EventBus.emit('update_library', {
-                            notes: this.notes,
-                            links: this.links,
-                        })
+                    // 串联起来，以避免重复更新
+                    this.update_links()
+                    // // 等待返回笔记数据后再更新卡片盒，以正确显示。
+                    // EventBus.emit('update_library', {
+                    //     notes: this.notes,
+                    //     links: this.links,
+                    // })
 
-                        this.update_graph()
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
+                    // this.update_graph()
+                }).catch((err) => {
+                    console.log(err)
+                })
             }
         },
         update_links() {
+            if (this.login_state) {
+                axios.get('/graph/get_all', { params: {
+                    author: this.username
+                }}).then((response) => {
+                    this.links = response.data
 
+                    // 等待返回笔记数据后再更新卡片盒，以正确显示。
+                    EventBus.emit('update_library', {
+                        notes: this.notes,
+                        links: this.links,
+                    })
+
+                    this.update_graph()
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         },
         toggle_display_ids() {
             this.display_ids = !this.display_ids
@@ -291,12 +304,24 @@ export default {
         update_graph() {
             // 更新图谱节点
             this.graph_data.nodes = []
-            for (var i = 0; i < this.notes.length; i++) {
+            for (let i = 0; i < this.notes.length; i++) {
                 this.graph_data.nodes.push({
                     id: this.notes[i].id,
                     name: this.notes[i].title,
                 })
             }
+
+            // 更新图谱连线
+            this.graph_data.links = []
+            for (let i = 0; i < this.links.length; i++) {
+                for (let j = 0; j < this.links[i].linked_notes.length; j++) {
+                    this.graph_data.links.push({
+                        source: this.links[i].note,
+                        target: this.links[i].linked_notes[j]
+                    })
+                }
+            }
+
             this.initGraph2D()
         },
     }
