@@ -35,7 +35,7 @@ export default {
     name: 'LibraryComponent',
     data() {
         return {
-            cards: [],
+            cards: [ { id:'0000', title: '当前没有笔记', content: '当前没有笔记\n请先登陆' } ],
             links: [],
             display_ids: true,
             display_delete_cards: false,

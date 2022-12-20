@@ -72,19 +72,8 @@ export default {
             // end_date: new Date('2022-12-31'),
             graph: null,
             graph_data: {  // test data
-                nodes: [
-                    { id: "6399c7bbfe5e0b1ee272cfb7", name: "测试" },
-                    { id: "6399d84192b59d475cc41195", name: "留学日记" },
-                    { id: "639ae195edb0c50919926013", name: "留学日记" },
-                    { id: "639ae195edb0c50919926012", name: "留学日记" },
-                    { id: "639ae4e76265b20d24978e94", name: "留学日记" },
-                ],
-                links: [
-                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "6399d84192b59d475cc41195" },
-                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae195edb0c50919926013" },
-                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae195edb0c50919926012" },
-                    { "source": "6399c7bbfe5e0b1ee272cfb7", "target": "639ae4e76265b20d24978e94" },
-                ],
+                nodes: [],
+                links: [],
             },
             login_state: false,
             username: "",
@@ -174,7 +163,11 @@ export default {
         })
 
         EventBus.emit('update_login_state', this.login_state)
-        
+        EventBus.emit('update_library', {
+            notes: this.notes,
+            links: this.links
+        })
+
         this.initGraph2D()
     },
     methods: {
@@ -276,6 +269,8 @@ export default {
                             notes: this.notes,
                             links: this.links,
                         })
+
+                        this.update_graph()
                     })
                     .catch((err) => {
                         console.log(err)
@@ -292,7 +287,18 @@ export default {
         toggle_display_delete() {
             this.display_card_delete = !this.display_card_delete
             EventBus.emit('toggle_display_delete', this.display_card_delete)
-        }
+        },
+        update_graph() {
+            // 更新图谱节点
+            this.graph_data.nodes = []
+            for (var i = 0; i < this.notes.length; i++) {
+                this.graph_data.nodes.push({
+                    id: this.notes[i].id,
+                    name: this.notes[i].title,
+                })
+            }
+            this.initGraph2D()
+        },
     }
 }
 </script>

@@ -2,7 +2,6 @@
 function notes(options) {
     // 模式：获取笔记
     this.add({service:'note_service', cmd:'get'}, (msg, respond) => {
-        console.log(msg)
         var note_id = msg.args.query.id
         
         this.make('note_db').load$({ id: note_id }, (err, note) => {
