@@ -22,6 +22,5 @@ const app = createApp(App)
     .use(VueMarkdownEditor)
 app.mount('#app')
 app.config.globalProperties.$axios = axios.create({
-    baseURL: 'http://localhost:3000',
     timeout: 3000
 })

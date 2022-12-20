@@ -12,6 +12,7 @@
                 <button @click="login">登入</button> <button @click="signup">注册</button>
                 <div v-if="fail_not_empty">用户或密码不能为空</div>
                 <div v-if="fail_wrong_info">登入失败，用户名或密码错误</div>
+                <div v-if="fail_user_exists">注册失败，用户已存在</div>
                 <div v-if="success_login">登入成功</div>
                 <div v-if="success_signup">注册成功</div>
             </div>
@@ -81,6 +82,7 @@ export default {
             password: "",
             fail_not_empty: false,
             fail_wrong_info: false,
+            fail_user_exists: false,
             success_login: false,
             success_signup: false,
             notes: [
@@ -134,30 +136,34 @@ export default {
         },
         login() {
             if (this.username == "" || this.password == "") {
+                this.clear_notifications()
                 this.fail_not_empty = true
             }
             else {
-                // TODO: 发送登陆请求...
                 axios.post(
                     '/user/login', 
                     { userdata: {username: this.username, password: this.password} })
                     .then((response) => {
-                        console.log(response.data)
+                        var result = response.data.result
+                        if (result == 'success') {
+                            this.clear_notifications()
+                            this.success_login = true
+                            this.login_state = true
+
+                            EventBus.emit('update_login_state', this.login_state)
+
+                            // TODO: 调用笔记数据侦听事件
+                            EventBus.emit('update_library', {
+                                notes: this.notes,
+                                links: this.links,
+                            })
+                        }
+                        else {
+                            this.clear_notifications()
+                            this.fail_wrong_info = true
+                        }
                     }
                 )
-
-                this.login_state = true
-                EventBus.emit('update_login_state', this.login_state)
-                // TODO: 调用笔记数据侦听事件
-                EventBus.emit('update_library', {
-                    notes: this.notes,
-                    links: this.links,
-                })
-                
-                this.success_login = true
-                this.success_signup = false
-                this.fail_not_empty = false
-                this.fail_wrong_info = false
             }
         },
         signup() {
@@ -165,10 +171,21 @@ export default {
                 this.fail_not_empty = true
             }
             else {
-                // TODO: 发送注册请求...
-                this.success_signup = true
-                this.fail_not_empty = false
-                this.fail_wrong_info = false
+                axios.post(
+                    '/user/signup', 
+                    { userdata: {username: this.username, password: this.password} })
+                    .then((response) => {
+                        var result = response.data.result
+                        if (result == 'success') {
+                            this.clear_notifications()
+                            this.success_signup = true
+                        }
+                        else {
+                            this.clear_notifications()
+                            this.fail_user_exists = true
+                        }
+                    }
+                )
             }
         },
         logout() {
@@ -182,10 +199,14 @@ export default {
                 links: this.links
             })
 
+            this.clear_notifications()
+        },
+        clear_notifications() {
             this.success_login = false
             this.success_signup = false
             this.fail_not_empty = false
             this.fail_wrong_info = false
+            this.fail_user_exists = false
         }
     }
 }

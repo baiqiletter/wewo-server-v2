@@ -29,6 +29,7 @@ const ServiceList = Config.ServiceList
 var seneca = require('seneca')()
 	.use( SenecaWeb, senecaWebConfig )
 	.use( './plugins/test' )
+	.use( './plugins/user_service' )
 	.client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, port:ServiceList.user_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, port:ServiceList.note_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, port:ServiceList.graph_service.port } )
