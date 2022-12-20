@@ -4,8 +4,8 @@
             不写，就无法思考。「卢曼卡片盒笔记写作法」
         </div>
         <div class="editing-info">
-            <span v-if="this.note_id!=''">你正在写卡片#{{this.note_id}}，想<a @click="this.reset_id">创作新卡片</a>？</span>
-            <span v-else-if="this.copied_id!=''">已复制卡片ID #{{this.copied_id}}</span>
+            <span v-if="this.copied_id!=''">已复制卡片ID #{{this.copied_id}}</span>
+            <span v-else-if="this.note_id!=''">你正在写卡片#{{this.note_id}}，想<a @click="this.reset_id">创作新卡片</a>？</span>
             <span v-else>你将写一张新卡片，也可以右键任意卡片以编辑</span>
         </div>
         <!-- <div class="change-view">
@@ -44,7 +44,9 @@ export default {
         })
         EventBus.on('copy_id_notify', (id) => {
             this.copied_id = id
-            setTimeout(() => {
+            // 先清空定时器，避免定时器累加或产生不可预期的bug
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
                 this.copied_id = ''
             }, 800)
         })
