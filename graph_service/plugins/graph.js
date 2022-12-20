@@ -1,19 +1,5 @@
 // 图谱服务插件
 function graph(options) {
-    // 初始化插件
-    this.add('init:graph', (msg, respond) => {
-        this.act('role:web', { routes: {
-            prefix: '/graph',
-            pin:    'service:graph_service, cmd:*',
-            map: {
-                update_link: { POST: true },
-                delete_link: { POST: true },
-            }
-        }}, respond)
-        console.log('graph_service init.')
-        respond()
-    })
-
     // 模式：建立链接
     this.add({service:'graph_service', cmd:'update_link'}, (msg, respond) => {
         // TODO: 将链接 { note: id, linked_notes: [ids], author: user} 写入数据库

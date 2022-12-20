@@ -65,6 +65,7 @@ export default {
             this.$copyText(item.id).then(
                 () => {
                     console.log(item.id + ' copied to clipboard')
+                    EventBus.emit('copy_id_notify', item.id)
                 },
                 () => {
                     console.log(item.id + ' copy failed to clipboard')
