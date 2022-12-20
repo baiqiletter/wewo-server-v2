@@ -16,23 +16,23 @@ const seneca = require('seneca')()
     .listen({port:3001, type:'http'}) 
 
 // 测试接口
-var userdata = {
-    username: 'test user',
-    password: '123456'
-}
-seneca.act({service:'user_service', cmd:'signup', userdata:userdata}, (err, data) => {
-    if (!err) {
-        console.log('signup success, your account is ' + userdata.username + ', password is ' + userdata.password)
-    }
-    else {
-        console.log('signup failed: ' + err)
-    }
-})
-seneca.act({service:'user_service', cmd:'login', userdata:userdata}, (err, data) => {
-    if (!err) {
-        console.log('login success, your account is ' + userdata.username + ', password is ' + userdata.password)
-    }
-    else {
-        console.log('login failed: ' + err)
-    }
-})
+// var userdata = {
+//     username: 'test user',
+//     password: '123456'
+// }
+// seneca.act({service:'user_service', cmd:'signup', userdata:userdata}, (err, data) => {
+//     if (!err) {
+//         console.log('signup success, your account is ' + userdata.username + ', password is ' + userdata.password)
+//     }
+//     else {
+//         console.log('signup failed: ' + err)
+//     }
+// })
+// seneca.act({service:'user_service', cmd:'login', userdata:userdata}, (err, data) => {
+//     if (!err) {
+//         console.log('login success, your account is ' + userdata.username + ', password is ' + userdata.password)
+//     }
+//     else {
+//         console.log('login failed: ' + err)
+//     }
+// })

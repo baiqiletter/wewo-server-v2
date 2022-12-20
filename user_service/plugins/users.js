@@ -10,8 +10,6 @@ function users(options) {
                 signup: { POST: true }
             }
         }}, respond)
-        console.log('user_service init.')
-        respond()
     })
     
     // 模式：连通测试
@@ -48,7 +46,7 @@ function users(options) {
         var userdata = msg.userdata
         var username = userdata.username
         var password = userdata.password
-
+        console.log('\n[receive] user login: ' + username + ' ' + password)
         // 检查账号密码是否匹配
         this.make('user_db').load$({username:username}, (err, data) => {
             if (data) {  // 有返回数据代表账号密码匹配

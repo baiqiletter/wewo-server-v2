@@ -12,7 +12,12 @@ var senecaWebConfig = {
 var app = Express()
 	.use( require('body-parser').json() )
 	.use( context )
-	.listen(3000)
+
+app.use(Express.static(__dirname + '/public'))
+app.get('/', function (req, res) {
+	res.render(__dirname + '/public/index.html')
+})
+app.listen(3000)
 
 
 // 获取配置信息
@@ -24,7 +29,6 @@ const ServiceList = Config.ServiceList
 var seneca = require('seneca')()
 	.use( SenecaWeb, senecaWebConfig )
 	.use( './plugins/test' )
-	.use( './plugins/ui' )
 	.client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, port:ServiceList.user_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, port:ServiceList.note_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, port:ServiceList.graph_service.port } )

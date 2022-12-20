@@ -48,6 +48,7 @@
 
 <script>
 // import { CalendarHeatmap } from 'vue3-calendar-heatmap'
+import axios from 'axios'
 import ForceGraph from 'force-graph'
 import EventBus from '../libs/EventBus.vue'
 
@@ -137,6 +138,14 @@ export default {
             }
             else {
                 // TODO: 发送登陆请求...
+                axios.post(
+                    '/user/login', 
+                    { userdata: {username: this.username, password: this.password} })
+                    .then((response) => {
+                        console.log(response.data)
+                    }
+                )
+
                 this.login_state = true
                 EventBus.emit('update_login_state', this.login_state)
                 // TODO: 调用笔记数据侦听事件
