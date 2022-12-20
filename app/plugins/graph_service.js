@@ -8,8 +8,10 @@ function graph_service( options ) {
             prefix: '/graph',
             pin:    'service:graph_service, cmd:*',
             map: {
-                update_link: { POST: true },
-                delete_link: { POST: true },
+                update: { POST: true },
+                delete: { POST: true },
+                get_all: { GET: true },
+                refresh: { POST: true }
             }
         }}, respond)
     })
