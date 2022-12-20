@@ -85,35 +85,31 @@ export default {
             fail_user_exists: false,
             success_login: false,
             success_signup: false,
-            notes: [
-                '7月4日\n新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》……',
-                '7月13日\n打牌。',
-                '7月14日\n打牌。',
-                '7月15日\n打牌。',
-                '7月16日\n胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？\n子曰：“吾日三省吾身。”...不能再这样下去了！',
-                '7月17日\n打牌。',
-                '7月18日\n打牌。',
-                '![image.png](https://realenet-1301408934.cos.ap-nanjing.myqcloud.com/markdown/material/zhishiku/material/1660791733099/1/image.png)',
-                '七月四日\n读Plato’s Apology of Socrates。今日为美国独立纪念日，夜八时至湖上观此间庆祝会。士女来游者无算，公园中百戏俱陈，小儿女燃花爆为乐。既而焰火作矣，五光十色，备极精巧。九时半始归。',
-                '七月十三日\n上课。读《陶渊明诗》一卷。',
-                '七月十四日\n化学第一小试。读拉丁文。夜游公园，适天微雨，众皆避入跳舞厅内。已而乐作，有男女约二十双，双双跳舞。此为余见跳舞之第一次，故记之。',
-                '七月十五日\n读拉丁文。读《谢康乐诗》一卷。作书寄友人。夜赴暑期学生之欢迎会。',
-                '七月十六日\n游湖上别墅，归后大风雨。读拉丁文。',
-                '七月十七日\n上课。化学试卷竟得百分，真出意外。读拉丁文。',
-            ],
-            links: [
-
-            ]
+            // notes: [
+                // '7月4日\n新开这本日记，也为了督促自己下个学期多下些苦功。先要读完手边的莎士比亚的《亨利八世》……',
+                // '7月13日\n打牌。',
+                // '7月14日\n打牌。',
+                // '7月15日\n打牌。',
+                // '7月16日\n胡适之啊胡适之！你怎么能如此堕落！先前订下的学习计划你都忘了吗？\n子曰：“吾日三省吾身。”...不能再这样下去了！',
+                // '7月17日\n打牌。',
+                // '7月18日\n打牌。',
+                // '![image.png](https://realenet-1301408934.cos.ap-nanjing.myqcloud.com/markdown/material/zhishiku/material/1660791733099/1/image.png)',
+                // '七月四日\n读Plato’s Apology of Socrates。今日为美国独立纪念日，夜八时至湖上观此间庆祝会。士女来游者无算，公园中百戏俱陈，小儿女燃花爆为乐。既而焰火作矣，五光十色，备极精巧。九时半始归。',
+                // '七月十三日\n上课。读《陶渊明诗》一卷。',
+                // '七月十四日\n化学第一小试。读拉丁文。夜游公园，适天微雨，众皆避入跳舞厅内。已而乐作，有男女约二十双，双双跳舞。此为余见跳舞之第一次，故记之。',
+                // '七月十五日\n读拉丁文。读《谢康乐诗》一卷。作书寄友人。夜赴暑期学生之欢迎会。',
+                // '七月十六日\n游湖上别墅，归后大风雨。读拉丁文。',
+                // '七月十七日\n上课。化学试卷竟得百分，真出意外。读拉丁文。',
+            // ],
+            notes: [ { id:'0000', title: '当前没有笔记', content: '当前没有笔记\n请先登陆' } ],
+            links: [],
         }
     },
     mounted() {
         EventBus.on('update_data', () => {
-            console.log('update_data called')
-            // TODO: 请求当前用户的笔记数据
-            EventBus.emit('update_library', {
-                notes: this.notes,
-                links: this.links,
-            })
+            console.log('update_data')
+            this.update_notes()
+            this.update_links()
         })
 
         EventBus.emit('update_login_state', this.login_state)
@@ -150,13 +146,10 @@ export default {
                             this.success_login = true
                             this.login_state = true
 
-                            EventBus.emit('update_login_state', this.login_state)
+                            this.update_notes()
+                            this.update_links()
 
-                            // TODO: 调用笔记数据侦听事件
-                            EventBus.emit('update_library', {
-                                notes: this.notes,
-                                links: this.links,
-                            })
+                            EventBus.emit('update_login_state', this.login_state)
                         }
                         else {
                             this.clear_notifications()
@@ -192,6 +185,8 @@ export default {
             this.login_state = false
             EventBus.emit('update_login_state', this.login_state)
 
+            this.username = ""
+            this.password = ""
             this.notes = []
             this.links = []
             EventBus.emit('update_library', {
@@ -207,6 +202,27 @@ export default {
             this.fail_not_empty = false
             this.fail_wrong_info = false
             this.fail_user_exists = false
+        },
+        update_notes() {
+            if (this.login_state) {
+                axios.get('/note/get_all',
+                    { params: { author: this.username, } })
+                    .then((response) => {
+                        this.notes = response.data
+
+                        // 等待返回笔记数据后再更新卡片盒，以正确显示。
+                        EventBus.emit('update_library', {
+                            notes: this.notes,
+                            links: this.links,
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
+        },
+        update_links() {
+
         }
     }
 }

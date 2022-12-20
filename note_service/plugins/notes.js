@@ -1,69 +1,65 @@
 // 笔记服务插件
 function notes(options) {
-    // 初始化插件
-    this.add('init:notes', (msg, respond) => {
-        this.act('role:web', { routes: {
-            prefix: '/note',
-            pin:    'service:note_service, cmd:*',
-            map: {
-                get: { GET: true },
-                create: { POST: true },
-                update: { POST: true },
-                delete: { POST: true },
-                get_all: { GET: true },
-            }
-        }}, respond)
-        console.log('note_service init.')
-        respond()
-    })
-
     // 模式：获取笔记
     this.add({service:'note_service', cmd:'get'}, (msg, respond) => {
-        var note_id = msg.id
+        console.log(msg)
+        var note_id = msg.args.query.id
         
         this.make('note_db').load$({ id: note_id }, (err, note) => {
-            console.log('\nget note by id : ' + note.id + '-' + note.title)
+            console.log('\n[receive] get note by id : ' + note.id + '-' + note.title)
             respond(err, { id: note.id, note: note })
         })
     })
 
     // 模式：创建笔记
     this.add({service:'note_service', cmd:'create'}, (msg, respond) => {
-        var note = msg.note
+        var note_data = {
+            title: msg.args.body.title,
+            author: msg.args.body.author,
+            content: msg.args.body.content
+        }
         
-        this.make('note_db').data$(note).save$((err, note) => {
-            console.log('\ncreate note : ' + note.id + '-' + note.title)
+        this.make('note_db').data$(note_data).save$((err, note) => {
+            console.log('\n[receive] create note : ' + note.id + '-' + note.title)
             respond(err, { id: note.id })
         })
     })
 
     // 模式：更新笔记
     this.add({service:'note', cmd:'update'}, (msg, respond) => {
-        var note = msg.note  // 应有 id 字段
+        var note = msg.args.body.note  // 应有 id 字段
 
         this.make('note_db').data$(note).save$((err, note) => {
-            console.log('\nupdate note : ' + note.id + '-' + note.title)
+            console.log('\n[receive] update note : ' + note.id + '-' + note.title)
             respond(err, { id: note.id })
         })
     })
 
     // 模式：删除笔记
     this.add({service:'note_service', cmd:'delete'}, (msg, respond) => {
-        var note_id = msg.id
+        var note_id = msg.args.body.id
 
         this.make('note_db').remove$({ id: note_id }, (err, data) => {
-            console.log('\ndelete note : ' + note_id)
+            console.log('\n[receive] delete note : ' + note_id)
             respond(err, null)
         })
     })
 
     // 模式：获取所有笔记
     this.add({service:'note_service', cmd:'get_all'}, (msg, respond) => {
-        var username = msg.author
+        var username = msg.args.query.author
         this.make('note_db').list$({ author: username }, (err, data) => {
-            console.log('\nget all notes of ' + username)
-            console.log(data)
-            respond(err, data)
+            console.log('\n[receive] get all ' + data.length + ' notes of ' + username)
+            var result = []
+            for (var i = 0; i < data.length; i++) {
+                result.push({
+                    id: data[i].id,
+                    title: data[i].title,
+                    author: data[i].author,
+                    content: data[i].content,
+                })
+            }
+            respond(err, result)
         })
     })
 }

@@ -56,8 +56,8 @@ const seneca = require('seneca')()
 //         console.log('\ncallback delete success ' + target_note_id)
 //     }
 // })
-seneca.act({service:'note_service', cmd:'get_all', author:'胡适'}, (err, data) => {
-    if (!err) {
-        console.log('\ncallback get_all success, total ' + data.length + ' notes')
-    }
-})
+// seneca.act({service:'note_service', cmd:'get_all', author:'胡适'}, (err, data) => {
+//     if (!err) {
+//         console.log('\ncallback get_all success, total ' + data.length + ' notes')
+//     }
+// })

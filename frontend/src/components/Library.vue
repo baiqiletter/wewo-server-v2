@@ -7,7 +7,7 @@
             :break-at="{ 600: 2, 300: 1}"
         >
             <div class="card-container" v-for="(item,index) in cards" :key="index">
-                <v-md-editor :model-value="item" mode="preview"></v-md-editor>
+                <v-md-editor :model-value="item.content" mode="preview"></v-md-editor>
             </div>
         </VueFlexWaterfall>
     </div>
@@ -21,10 +21,8 @@ export default {
     name: 'LibraryComponent',
     data() {
         return {
-            cards: [
-                '当前没有笔记\n请先登陆'
-            ],
-            links: []
+            cards: [],
+            links: [],
         }
     },
     mounted() {
@@ -32,6 +30,8 @@ export default {
             console.log('update_library')
             this.cards = data.notes
             this.links = data.links
+            console.log(data.notes)
+            console.log(this.cards)
         })
     },
     methods: {
