@@ -62,9 +62,9 @@ export default {
             EventBus.emit('delete_note', item)
         },
         copy_note_id(item) {
-            this.$copyText(item.id).then(
+            this.$copyText('[#id:' + item.id + ']').then(
                 () => {
-                    console.log(item.id + ' copied to clipboard')
+                    // console.log(item.id + ' copied to clipboard')
                     EventBus.emit('copy_id_notify', item.id)
                 },
                 () => {
