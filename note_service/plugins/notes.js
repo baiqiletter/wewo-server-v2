@@ -26,10 +26,15 @@ function notes(options) {
     })
 
     // 模式：更新笔记
-    this.add({service:'note', cmd:'update'}, (msg, respond) => {
-        var note = msg.args.body.note  // 应有 id 字段
+    this.add({service:'note_service', cmd:'update'}, (msg, respond) => {
+        var note_data = {
+            id: msg.args.body.id,
+            title: msg.args.body.title,
+            author: msg.args.body.author,
+            content: msg.args.body.content
+        }
 
-        this.make('note_db').data$(note).save$((err, note) => {
+        this.make('note_db').data$(note_data).save$((err, note) => {
             console.log('\n[receive] update note : ' + note.id + '-' + note.title)
             respond(err, { id: note.id })
         })

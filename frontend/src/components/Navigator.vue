@@ -35,6 +35,8 @@
             <h3>视图</h3>
             <a @click="this.toggle_display_ids" v-if="this.display_ids">切换卡片ID显示（<b>Y</b>/N）</a>
             <a @click="this.toggle_display_ids" v-if="!this.display_ids">切换卡片ID显示（Y/<b>N</b>）</a>
+            <br />
+            <a>按时间排序（<b>Y</b>/N)</a>
         </div>
         <div class="graph-container">
             <h3>图谱</h3>
@@ -120,6 +122,25 @@ export default {
             axios.post(
                 '/note/create',
                 {
+                    title: data.title,
+                    author: this.username,
+                    content: data.content,
+                }
+            )
+            .then(() => {
+                this.update_notes()
+                this.update_links()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        })
+
+        EventBus.on('update_note', (data) => {
+            axios.post(
+                '/note/update',
+                {
+                    id: data.id,
                     title: data.title,
                     author: this.username,
                     content: data.content,
@@ -228,7 +249,7 @@ export default {
         update_notes() {
             if (this.login_state) {
                 axios.get('/note/get_all',
-                    { params: { author: this.username, } })
+                    { params: { author: this.username, order: 'time_order' } })
                     .then((response) => {
                         this.notes = response.data
 

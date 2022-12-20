@@ -1,10 +1,10 @@
 <template>
     <div class="writer">
         <div class="hello-word">
-            不写，就无法思考。————「卢曼卡片盒笔记写作法」
+            不写，就无法思考。「卢曼卡片盒笔记写作法」
         </div>
         <div class="editing-info">
-            <span v-if="this.note_id!=''">你正在写卡片#{{this.note_id}}</span>
+            <span v-if="this.note_id!=''">你正在写卡片#{{this.note_id}}，想<a @click="this.reset_id">创作新卡片</a>？</span>
             <span v-else>你将写一张新卡片，也可以右键任意卡片以编辑</span>
         </div>
         <!-- <div class="change-view">
@@ -57,15 +57,29 @@ export default {
             var linebreak_index = this.note_content.indexOf('\n')
             var note_title = this.note_content.substring(0, linebreak_index)
             if (this.login_state) {
-                EventBus.emit('create_note', {
-                    title: note_title,
-                    content: this.note_content
-                })
-                this.note_content = '*我有些想法......*'
+                if (this.note_id == "") {  // 创建新笔记
+                    EventBus.emit('create_note', {
+                        title: note_title,
+                        content: this.note_content
+                    })
+                    this.note_content = '*我有些想法......*'
+                }
+                else {  // 更新已有笔记
+                    EventBus.emit('update_note', {
+                        id: this.note_id,
+                        title: note_title,
+                        content: this.note_content
+                    })
+                    this.note_id = ""
+                    this.note_content = '*我有些想法......*'
+                }
             }
             else {
                 alert('请先在左侧登入。')
             }
+        },
+        reset_id() {
+            this.note_id = ""
         },
     },
 }
