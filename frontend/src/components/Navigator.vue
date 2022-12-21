@@ -250,23 +250,16 @@ export default {
         EventBus.on('update_local_graph', (note_id) => {
             // 局部图谱：以note_id为中心的图谱
             // 还原图谱节点和边
-            this.graph_data.nodes = this.notes
-            this.graph_data.nodes.map((node) => {
-                return { id: node.id, name: node.title }
-            })
-            this.graph_data.links = this.links
+            this.update_graph()
 
             // 如果笔记ID为空，代表新建卡片或者重置为全局图谱，跳过节点过滤
             if (note_id != '') {
                 // 过滤graph_data的节点和链接，但this.nodes和this.links始终保存完整数据
                 var local_nodes = [note_id]
                 this.graph_data.links = this.graph_data.links.filter((link) => {
-                    if (link.source.id == note_id) {
-                        local_nodes.push(link.target.id)
-                        return true
-                    }
-                    else if (link.target.id == note_id) {
-                        local_nodes.push(link.source.id)
+                    if (link.source == note_id || link.target == note_id) {
+                        local_nodes.push(link.source)
+                        local_nodes.push(link.target)
                         return true
                     }
                     else {
@@ -276,9 +269,12 @@ export default {
                 this.graph_data.nodes = this.graph_data.nodes.filter((node) => {
                     return local_nodes.indexOf(node.id) != -1
                 })
+                // console.log('update_local_graph')
+                // console.log(this.graph_data.nodes)
+                // console.log(this.graph_data.links)
+                
+                this.initGraph2D()
             }
-
-            this.initGraph2D()
         })
 
         EventBus.emit('update_login_state', this.login_state)
@@ -426,24 +422,21 @@ export default {
         },
         update_graph() {
             // 更新图谱节点和边
-            this.graph_data.nodes = this.notes
-            this.graph_data.nodes.map((node) => {
-                return { id: node.id, name: node.title }
-            })
-            this.graph_data.links = this.links
-            // for (let i = 0; i < this.notes.length; i++) {
-            //     this.graph_data.nodes.push({
-            //         id: this.notes[i].id,
-            //         name: this.notes[i].title,
-            //     })
-            // }
+            this.graph_data.nodes = []
+            for (let i = 0; i < this.notes.length; i++) {
+                this.graph_data.nodes.push({
+                    id: this.notes[i].id,
+                    name: this.notes[i].title,
+                })
+            }
             
-            // for (let i = 0; i < this.links.length; i++) {
-            //     this.graph_data.links.push({
-            //         source: this.links[i].source,
-            //         target: this.links[i].target
-            //     })
-            // }
+            this.graph_data.links = []
+            for (let i = 0; i < this.links.length; i++) {
+                this.graph_data.links.push({
+                    source: this.links[i].source,
+                    target: this.links[i].target
+                })
+            }
 
             this.initGraph2D()
         },
