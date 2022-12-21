@@ -15,6 +15,7 @@ function graph_service( options ) {
                 get_reverse_links: { GET: true },
             }
         }}, respond)
+        console.log('graph service initialized')
     })
 }
 

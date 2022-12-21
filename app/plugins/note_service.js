@@ -15,6 +15,7 @@ function note_service( options ) {
                 get_all: { GET: true },
             }
         }}, respond)
+        console.log('note service initialized')
     })
 }
 

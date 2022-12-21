@@ -2,7 +2,7 @@
 function notes(options) {
     // 模式：连通测试
     this.add({service:'note_service', cmd:'ping'}, (msg, respond) => {
-        console.log('\n[receive] ping notes plugin, note_service\n')
+        console.log('[receive] ping notes plugin, note_service')
         respond(null, {response:'notes service is available', data:msg.data})
     })
 
@@ -11,7 +11,7 @@ function notes(options) {
         var note_id = msg.args.params.id
         
         this.make('note_db').load$({ id: note_id }, (err, note) => {
-            console.log('\n[receive] get note by id : ' + note.id + ' - ' + note.title)
+            console.log('[receive] get note by id : ' + note.id + ' - ' + note.title)
             respond(err, {
                 id: note.id, 
                 title: note.title,
@@ -30,7 +30,7 @@ function notes(options) {
         }
         
         this.make('note_db').data$(note_data).save$((err, note) => {
-            console.log('\n[receive] create note : ' + note.id + ' - ' + note.title)
+            console.log('[receive] create note : ' + note.id + ' - ' + note.title)
             respond(err, { id: note.id })
         })
     })
@@ -45,7 +45,7 @@ function notes(options) {
         }
 
         this.make('note_db').data$(note_data).save$((err, note) => {
-            console.log('\n[receive] update note : ' + note.id + ' - ' + note.title)
+            console.log('[receive] update note : ' + note.id + ' - ' + note.title)
             respond(err, { id: note.id })
         })
     })
@@ -55,7 +55,7 @@ function notes(options) {
         var note_id = msg.args.body.id
 
         this.make('note_db').remove$({ id: note_id }, (err, data) => {
-            console.log('\n[receive] delete note : ' + note_id)
+            console.log('[receive] delete note : ' + note_id)
             respond(err, { id: note_id })
         })
     })
@@ -64,7 +64,7 @@ function notes(options) {
     this.add({service:'note_service', cmd:'get_all'}, (msg, respond) => {
         var username = msg.args.query.author
         this.make('note_db').list$({ author: username }, (err, data) => {
-            console.log('\n[receive] get all ' + data.length + ' notes of ' + username)
+            console.log('[receive] get all ' + data.length + ' notes of ' + username)
             var result = []
             for (var i = 0; i < data.length; i++) {
                 result.push({

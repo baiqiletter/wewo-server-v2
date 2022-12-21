@@ -12,6 +12,7 @@ function user_service( options ) {
                 signup: { POST: true }
             }
         }}, respond)
+        console.log('user service initialized')
     })
 }
 

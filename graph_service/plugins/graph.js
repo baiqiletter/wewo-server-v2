@@ -8,7 +8,7 @@ const collection = client.db("graph_db").collection("links")
 function graph(options) {
     // 模式：连通测试
     this.add({service:'graph_service', cmd:'ping'}, (msg, respond) => {
-        console.log('\n[receive] ping graph plugin, graph_service\n')
+        console.log('[receive] ping graph plugin, graph_service')
         respond(null, {response:'graph service is available', data:msg.data})
     })
 
@@ -24,7 +24,7 @@ function graph(options) {
         }
 
         var source = links[0].source
-        console.log('\n[receive] update note links : ' + source)
+        console.log('[receive] update note links : ' + source)
 
         // 是否应该同时保存笔记的id和标题（用于在图谱中显示）？不需要，因为图谱的节点和链接数据是分开的，graph_service只负责链接部分
         // 首先删除已有链接，再新建链接。每一条数据只表示一条单向链接
@@ -51,7 +51,7 @@ function graph(options) {
         // { note: id }
         // 删除笔记时，删除相关链接
         var note_id = msg.args.body.note
-        console.log('\n[receive] delete note links : ' + note_id)
+        console.log('[receive] delete note links : ' + note_id)
 
         async function run() {
             try {
@@ -99,7 +99,7 @@ function graph(options) {
             } finally {
                 // Ensures that the client will close when you finish/error
                 await client.close();
-                console.log('\n[receive] get all ' + result.length + ' links of : ' + username)
+                console.log('[receive] get all ' + result.length + ' links of : ' + username)
                 respond(null, result)
             }
         }
@@ -112,16 +112,16 @@ function graph(options) {
         var links = msg.args.body.links
         var username = msg.args.body.author
 
-        console.log('\n[receive] refresh all links of ' + username)
+        console.log('[receive] refresh all links of ' + username)
 
         async function run() {
             try {
                 await client.connect();
                 
                 const deleteResult = await collection.deleteMany({ author: username })
-                console.log("Deleted " + deleteResult.deletedCount + " documents on source = " + note_id);
+                console.log("deleted " + deleteResult.deletedCount + " documents on source = " + note_id);
                 const insertResult = await collection.insertMany(links)
-                console.log(`${insertResult.insertedCount} documents were inserted`);
+                console.log("inserted " + insertResult.insertedCount + " documents");
             } finally {
                 // Ensures that the client will close when you finish/error
                 await client.close();

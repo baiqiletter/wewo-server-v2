@@ -256,6 +256,7 @@ export default {
             if (note_id != '') {
                 // 过滤graph_data的节点和链接，但this.nodes和this.links始终保存完整数据
                 var local_nodes = [note_id]
+                // TODO: 目前还不能展示所有相关的节点和边，只支持直接相连
                 this.graph_data.links = this.graph_data.links.filter((link) => {
                     if (link.source == note_id || link.target == note_id) {
                         local_nodes.push(link.source)
