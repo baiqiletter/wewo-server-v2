@@ -191,6 +191,11 @@ export default {
                         author: this.username
                     }
                 ).then(() => {
+                    // 重置Writer编辑器状态，防止编辑已删除的笔记
+                    EventBus.emit('focus_note', {
+                        note_id: '',
+                        note_content: '*我有些想法......*'
+                    })
                     this.update_notes()
                 }).catch((error) => {
                     console.log(error)
