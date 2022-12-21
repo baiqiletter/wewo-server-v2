@@ -32,8 +32,8 @@ var seneca = require('seneca')()
 	.use( './plugins/user_service' )
 	.use( './plugins/note_service' )
 	.use( './plugins/graph_service' )
-	.use( './plugins/image_hosting' )
+
 	.client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, port:ServiceList.user_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, port:ServiceList.note_service.port } )
 	.client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, port:ServiceList.graph_service.port } )
-	.client( { type:Protocol, pin:'service:'+ServiceList.image_hosting.name, port:ServiceList.image_hosting.port } )
+

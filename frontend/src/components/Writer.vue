@@ -101,14 +101,14 @@ export default {
         },
         upload_image(event, insertImage, files) {
             var file = files[0]  // 一次只能上传一张图片
-            console.log(file)
+            // console.log(file)
             var formData = new FormData();
-            formData.append('file', file)
-            formData.append('filename', file.name)
-            axios.post('/image/upload', formData).then(
+            formData.append('image', file)
+            axios.post('http://localhost:3004/image', formData).then(
                 response => {
+                    // console.log(response)
                     insertImage({
-                        url: response.data.image,
+                        url: 'http://localhost:3004/image/' + response.data.image,
                         desc: 'img',
                     })
                 },

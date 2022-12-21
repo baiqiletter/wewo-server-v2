@@ -15,10 +15,6 @@ const ServiceList = {
         name: 'graph_service',
         port: 3003,
     },
-    image_hosting: {
-        name: 'image_hosting',
-        port: 3004,
-    }
 };
 
 const Config = function(){};
