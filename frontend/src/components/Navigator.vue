@@ -39,7 +39,8 @@
             <a @click="this.toggle_display_delete" v-if="this.display_card_delete">切换卡片删除显示（<b>Y</b>/N）</a>
             <a @click="this.toggle_display_delete" v-if="!this.display_card_delete">切换卡片删除显示（Y/<b>N</b>）</a>
             <br />
-            <a>按时间排序（<b>Y</b>/N)</a>
+            <a @click="this.toglle_cards_order" v-if="this.cards_in_order">卡片按时间正序排列（<b>Y</b>/N)</a>
+            <a @click="this.toglle_cards_order" v-if="!this.cards_in_order">卡片按时间正序排列（Y/<b>N</b>)</a>
         </div>
         <div class="graph-container">
             <h3>图谱</h3>
@@ -102,6 +103,7 @@ export default {
             links: [],
             display_ids: true,
             display_card_delete: false,
+            cards_in_order: true,
             linked_notes: [],
         }
     },
@@ -327,7 +329,7 @@ export default {
         update_notes() {
             if (this.login_state) {
                 axios.get('/note/get_all', { params: { 
-                    author: this.username, order: 'time_order' 
+                    author: this.username
                 }}).then((response) => {
                     this.notes = response.data
 
@@ -364,6 +366,9 @@ export default {
         toggle_display_delete() {
             this.display_card_delete = !this.display_card_delete
             EventBus.emit('toggle_display_delete', this.display_card_delete)
+        },
+        toglle_cards_order() {
+            this.notes.reverse()
         },
         update_graph() {
             // 更新图谱节点和边
