@@ -1,0 +1,110 @@
+version: '2'
+ 
+services:
+  app:
+    build: ./app/
+    container_name: app
+    # restart: always
+    image: wewo/app
+    ports:
+      - "3000:3000"
+    links:
+      - user_service
+      - note_service
+      - graph_service
+      - image_hosting
+    tty: true
+    networks:
+      - wewo-net
+  user_service:
+    build: ./user_service/
+    container_name: user_service
+    # restart: always
+    image: wewo/user_service
+    links: 
+      - user_mongodb
+    ports:
+      - "3001:3001"
+    tty: true
+    networks:
+      - wewo-net
+  note_service:
+    build: ./note_service/
+    container_name: note_service
+    # restart: always
+    image: wewo/note_service
+    links: 
+      - note_mongodb
+    ports:
+      - "3002:3002"
+    tty: true
+    networks:
+      - wewo-net
+  graph_service:
+    build: ./graph_service/
+    container_name: graph_service
+    # restart: always
+    image: wewo/graph_service
+    links: 
+      - graph_mongodb
+    ports:
+      - "3003:3003"
+    tty: true
+    networks:
+      - wewo-net
+  image_hosting:
+    build: ./image_hosting/
+    container_name: image_hosting
+    # restart: always
+    image: wewo/image_hosting
+    links: 
+      - image_hosting_minio
+    ports:
+      - "3004:3004"
+    tty: true
+    networks:
+      - wewo-net
+  user_mongodb:
+    container_name: user_smongodb
+    # restart: always
+    image: mongo
+    ports:
+      - "4001:4001"
+    tty: true
+    networks:
+      - wewo-net
+  note_mongodb:
+    container_name: note_smongodb
+    # restart: always
+    image: mongo
+    ports:
+      - "4002:4002"
+    tty: true
+    networks:
+      - wewo-net
+  graph_mongodb:
+    container_name: graph_smongodb
+    # restart: always
+    image: mongo
+    ports:
+      - "4003:4003"
+    tty: true
+    networks:
+      - wewo-net
+  image_hosting_minio:
+    container_name: image_hosting_minio
+    # restart: always
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: 12345678
+    command: ["server", "/data", "--console-address", ":4005"]
+    ports:
+      - "4004:4004"
+      - "4005:4005"
+    tty: true
+    networks:
+      - wewo-net
+networks: 
+  wewo-net:
+    driver: bridge  

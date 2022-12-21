@@ -104,11 +104,11 @@ export default {
             // console.log(file)
             var formData = new FormData();
             formData.append('image', file)
-            axios.post('http://localhost:3004/image', formData).then(
+            axios.post('image_hosting_minio:3004/image', formData).then(
                 response => {
                     // console.log(response)
                     insertImage({
-                        url: 'http://localhost:3004/image/' + response.data.image,
+                        url: 'image_hosting_minio:3004/image/' + response.data.image,
                         desc: 'img',
                     })
                 },

@@ -22,8 +22,8 @@ app.use(morgan('dev'));
 var Minio = require('minio')
 
 var minioClient = new Minio.Client({
-    endPoint: 'localhost',
-    port: 9000,
+    endPoint: 'image_hosting_minio',
+    port: 4004,
     useSSL: false,
     accessKey: 'minio',
     secretKey: '12345678'
