@@ -379,6 +379,8 @@ export default {
                 }}).then((response) => {
                     this.notes = response.data
 
+                    this.cards_in_order = true
+
                     // 串联起来，以避免重复更新
                     this.update_links()
                 }).catch((err) => {
@@ -414,6 +416,7 @@ export default {
             EventBus.emit('toggle_display_delete', this.display_card_delete)
         },
         toglle_cards_order() {
+            this.cards_in_order = !this.cards_in_order
             this.notes.reverse()
             EventBus.emit('update_library', {
                 notes: this.notes,
