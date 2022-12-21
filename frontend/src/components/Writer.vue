@@ -41,6 +41,7 @@ export default {
         EventBus.on('focus_note', (note) => {
             this.note_id = note.id
             this.note_content = note.content
+            EventBus.emit('update_reverse_links', note.id)
         })
         EventBus.on('copy_id_notify', (id) => {
             this.copied_id = id

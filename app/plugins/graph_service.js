@@ -11,7 +11,8 @@ function graph_service( options ) {
                 update: { POST: true },
                 delete: { POST: true },
                 get_all: { GET: true },
-                refresh: { POST: true }
+                refresh: { POST: true },
+                get_reverse_links: { GET: true },
             }
         }}, respond)
     })

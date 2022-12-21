@@ -57,10 +57,10 @@ function graph(options) {
             try {
                 await client.connect();
 
-                const deleteResult = await collection.deleteMany({ source: note_id })
-                console.log("deleted " + deleteResult.deletedCount + " documents");
-                deleteResult = await collection.deleteMany({ target: note_id })
-                console.log("deleted " + deleteResult.deletedCount + " documents");
+                const deleteResult1 = await collection.deleteMany({ source: note_id })
+                console.log("deleted " + deleteResult1.deletedCount + " documents");
+                const deleteResult2 = await collection.deleteMany({ target: note_id })
+                console.log("deleted " + deleteResult2.deletedCount + " documents");
             } finally {
                 // Ensures that the client will close when you finish/error
                 await client.close();
@@ -123,6 +123,40 @@ function graph(options) {
                 // Ensures that the client will close when you finish/error
                 await client.close();
                 respond()
+            }
+        }
+        run().catch(console.dir);
+    })
+
+    // 模式：获取笔记的反向链接
+    this.add({service:'graph_service', cmd:'get_reverse_links'}, (msg, respond) => {
+        // { target: id, author: user }
+        var target = msg.args.query.target
+        var username = msg.args.query.author
+
+        var result = []
+
+        async function run() {
+            try {
+                await client.connect();
+
+                const cursor = await collection.find(
+                    { target: target },
+                    {  }
+                )
+                // print a message if no documents were found
+                if ((await cursor.count()) === 0) {
+                    console.log("no documents found!");
+                }
+                // replace console.dir with your callback to access individual elements
+                await cursor.forEach((element) => {
+                    result.push(element)
+                });
+            } finally {
+                // Ensures that the client will close when you finish/error
+                await client.close();
+                console.log('\n[receive] get ' + result.length + ' reverse links of : ' + target)
+                respond(null, result)
             }
         }
         run().catch(console.dir);

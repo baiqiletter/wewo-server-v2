@@ -45,13 +45,12 @@
             <h3>图谱</h3>
             <div ref="graph" id="graph"></div>
         </div>
-        <div class="linked-notes">
+        <div class="linked-notes-container">
             <h3>反向链接</h3>
-            <ul>
-                <li>留学日记第1篇</li>
-                <li>留学日记第2篇</li>
-                <li>留学日记第3篇</li>
-            </ul>
+            <p v-if="this.linked_notes.length==0">没有卡片链接到这里</p>
+            <p class="reverse-link" v-for="(item, index) in this.linked_notes" :key="index">
+                [{{index+1}}] {{ item.title }}<br /><a>[#id:{{ item.id }}]</a>
+            </p>
         </div>
     </div>
 </template>
@@ -103,6 +102,7 @@ export default {
             links: [],
             display_ids: true,
             display_card_delete: false,
+            linked_notes: [],
         }
     },
     mounted() {
@@ -204,6 +204,30 @@ export default {
             }).catch((error) => {
                 console.log(error)
             })
+        })
+
+        EventBus.on('update_reverse_links', (target) => {
+            if (this.login_state) {
+                axios.get('/graph/get_reverse_links', { params: {
+                    target: target,
+                    author: this.username
+                }}).then((response) => {
+                    var reverse_links = response.data
+                    this.linked_notes = []
+                    reverse_links.forEach((link) => {
+                        // 找到反向链接的笔记标题
+                        let note_data = this.notes.find((note) => {
+                            return note.id == link.source
+                        })
+                        this.linked_notes.push({
+                            id: link.source,
+                            title: note_data.title,
+                        })
+                    })
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         })
 
         EventBus.emit('update_login_state', this.login_state)
