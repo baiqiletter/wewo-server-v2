@@ -33,14 +33,15 @@
         </div>
         <div class="view-container">
             <h3>视图</h3>
+            <p><input v-model="this.keyword" class="search-input" type="text" /></p>
             <a @click="this.toggle_display_ids" v-if="this.display_ids">切换卡片ID显示（<b>Y</b>/N）</a>
             <a @click="this.toggle_display_ids" v-if="!this.display_ids">切换卡片ID显示（Y/<b>N</b>）</a>
             <br />
             <a @click="this.toggle_display_delete" v-if="this.display_card_delete">切换卡片删除显示（<b>Y</b>/N）</a>
             <a @click="this.toggle_display_delete" v-if="!this.display_card_delete">切换卡片删除显示（Y/<b>N</b>）</a>
             <br />
-            <a @click="this.toglle_cards_order" v-if="this.cards_in_order">卡片按时间正序排列（<b>Y</b>/N)</a>
-            <a @click="this.toglle_cards_order" v-if="!this.cards_in_order">卡片按时间正序排列（Y/<b>N</b>)</a>
+            <a @click="this.toglle_cards_order" v-if="this.cards_in_order">卡片按时间排序（<b>Y</b>/N)</a>
+            <a @click="this.toglle_cards_order" v-if="!this.cards_in_order">卡片按时间排序（Y/<b>N</b>)</a>
         </div>
         <div class="graph-container">
             <h3>图谱</h3>
@@ -105,6 +106,20 @@ export default {
             display_card_delete: false,
             cards_in_order: true,
             linked_notes: [],
+            keyword: '',
+            keywords: [],
+        }
+    },
+    watch: {
+        keyword: function (newValue) {
+            if (this.login_state) {
+                // 先恢复卡片库，再检索
+                EventBus.emit('update_library', {
+                    notes: this.notes,
+                    links: this.links
+                })
+                EventBus.emit('keyword_change', newValue)
+            }
         }
     },
     mounted() {
@@ -369,6 +384,11 @@ export default {
         },
         toglle_cards_order() {
             this.notes.reverse()
+            EventBus.emit('update_library', {
+                notes: this.notes,
+                links: this.links
+            })
+            EventBus.emit('keyword_change', this.keyword)
         },
         update_graph() {
             // 更新图谱节点和边
@@ -403,7 +423,7 @@ export default {
                 })
             }
             return links
-        }
+        },
     }
 }
 </script>

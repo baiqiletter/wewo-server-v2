@@ -40,6 +40,7 @@ export default {
             links: [],
             display_ids: true,
             display_delete_cards: false,
+            keyword: ''
         }
     },
     mounted() {
@@ -52,6 +53,12 @@ export default {
         })
         EventBus.on('toggle_display_delete', (data) => {
             this.display_delete_cards = data
+        })
+        EventBus.on('keyword_change', (data) => {
+            this.keyword = data
+            this.cards = this.cards.filter((card) => {
+                return card.content.indexOf(this.keyword) != -1
+            })
         })
     },
     methods: {
