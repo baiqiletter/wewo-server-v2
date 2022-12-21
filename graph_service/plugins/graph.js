@@ -91,12 +91,15 @@ function graph(options) {
                 }
                 // replace console.dir with your callback to access individual elements
                 await cursor.forEach((element) => {
-                    result.push(element)
+                    result.push({
+                        source: element.source,
+                        target: element.target
+                    })
                 });
             } finally {
                 // Ensures that the client will close when you finish/error
                 await client.close();
-                console.log('\n[receive] get all ' + result.length + 'links of : ' + username)
+                console.log('\n[receive] get all ' + result.length + ' links of : ' + username)
                 respond(null, result)
             }
         }

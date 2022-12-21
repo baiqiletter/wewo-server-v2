@@ -39,9 +39,12 @@ export default {
             this.login_state = state
         })
         EventBus.on('focus_note', (note) => {
-            this.note_id = note.id
-            this.note_content = note.content
-            EventBus.emit('update_reverse_links', note.id)
+            if (this.login_state) {
+                this.note_id = note.id
+                this.note_content = note.content
+                EventBus.emit('update_reverse_links', note.id)
+                EventBus.emit('update_local_graph', note.id)
+            }
         })
         EventBus.on('copy_id_notify', (id) => {
             this.copied_id = id
@@ -92,6 +95,7 @@ export default {
         },
         reset_id() {
             this.note_id = ""
+            EventBus.emit('update_local_graph', this.note_id)
         },
     },
 }
