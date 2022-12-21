@@ -122,13 +122,12 @@ export default {
             .then((response) => {
                 var note_id = response.data.id
                 // 解析该笔记的出链
-                var linked_notes = this.parse_links(data.content)
+                var links = this.parse_links(note_id, data.content, this.username)
                 // 更新该笔记的图谱
                 axios.post(
                     '/graph/update',
                     {
-                        note: note_id,
-                        linked_notes: linked_notes,
+                        links: links,
                         author: this.username
                     }
                 ).then(() => {
@@ -156,13 +155,12 @@ export default {
             .then((response) => {
                 var note_id = response.data.id
                 // 解析该笔记的出链
-                var linked_notes = this.parse_links(data.content)
+                var links = this.parse_links(note_id, data.content, this.username)
                 // 更新该笔记的图谱
                 axios.post(
                     '/graph/update',
                     {
-                        note: note_id,
-                        linked_notes: linked_notes,
+                        links: links,
                         author: this.username
                     }
                 ).then(() => {
@@ -339,7 +337,7 @@ export default {
             EventBus.emit('toggle_display_delete', this.display_card_delete)
         },
         update_graph() {
-            // 更新图谱节点
+            // 更新图谱节点和边
             this.graph_data.nodes = []
             for (let i = 0; i < this.notes.length; i++) {
                 this.graph_data.nodes.push({
@@ -347,29 +345,30 @@ export default {
                     name: this.notes[i].title,
                 })
             }
-
-            // 更新图谱连线
+            
             this.graph_data.links = []
             for (let i = 0; i < this.links.length; i++) {
-                for (let j = 0; j < this.links[i].linked_notes.length; j++) {
-                    this.graph_data.links.push({
-                        source: this.links[i].note,
-                        target: this.links[i].linked_notes[j]
-                    })
-                }
+                this.graph_data.links.push({
+                    source: this.links[i].source,
+                    target: this.links[i].target
+                })
             }
 
             this.initGraph2D()
         },
-        parse_links(note) {
+        parse_links(source, source_content, author) {
             // 解析该笔记的出链
             var patt = /\[#id:\S+?]/g
-            var linked_notes = []
+            var links = []
             var match
-            while((match = patt.exec(note)) != null) {
-                linked_notes.push(match[0].substring(5, match[0].length - 1))
+            while((match = patt.exec(source_content)) != null) {
+                links.push({
+                    source: source,
+                    target: match[0].substring(5, match[0].length - 1),
+                    author: author
+                })
             }
-            return linked_notes
+            return links
         }
     }
 }
