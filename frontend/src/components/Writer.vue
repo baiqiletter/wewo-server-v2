@@ -19,6 +19,7 @@
                 left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code"
                 right-toolbar="preview toc fullscreen"
                 :disabled-menus="[]"
+                @upload-image="upload_image"
             >
             </v-md-editor>
         </div>
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import EventBus from '../libs/EventBus.vue'
 
 export default {
@@ -96,6 +98,24 @@ export default {
         reset_id() {
             this.note_id = ""
             EventBus.emit('update_local_graph', this.note_id)
+        },
+        upload_image(event, insertImage, files) {
+            var file = files[0]  // 一次只能上传一张图片
+            console.log(file)
+            var formData = new FormData();
+            formData.append('file', file)
+            formData.append('filename', file.name)
+            axios.post('/image/upload', formData).then(
+                response => {
+                    insertImage({
+                        url: response.data.image,
+                        desc: 'img',
+                    })
+                },
+                error => {
+                    console.log('image upload failed', error.message)
+                }
+            )
         },
     },
 }
