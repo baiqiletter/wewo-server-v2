@@ -1,18 +1,22 @@
-version: '2'
- 
+version: '3'
+
+networks:
+  wewo-net:
+    driver: bridge
+
 services:
   app:
     build: ./app/
     container_name: app
     # restart: always
-    image: wewo/app
     ports:
       - "3000:3000"
-    links:
+    expose:
+      - "3000"
+    depends_on:
       - user_service
       - note_service
       - graph_service
-      - image_hosting
     tty: true
     networks:
       - wewo-net
@@ -20,74 +24,84 @@ services:
     build: ./user_service/
     container_name: user_service
     # restart: always
-    image: wewo/user_service
-    links: 
-      - user_mongodb
     ports:
       - "3001:3001"
+    expose:
+      - "3001"
     tty: true
+    depends_on:
+      - user_mongodb
     networks:
       - wewo-net
   note_service:
     build: ./note_service/
     container_name: note_service
     # restart: always
-    image: wewo/note_service
-    links: 
-      - note_mongodb
     ports:
       - "3002:3002"
+    expose:
+      - "3002"
     tty: true
+    depends_on:
+      - note_mongodb
     networks:
       - wewo-net
   graph_service:
     build: ./graph_service/
     container_name: graph_service
     # restart: always
-    image: wewo/graph_service
-    links: 
-      - graph_mongodb
     ports:
       - "3003:3003"
+    expose:
+      - "3003"
     tty: true
+    depends_on:
+      - graph_mongodb
     networks:
       - wewo-net
   image_hosting:
     build: ./image_hosting/
     container_name: image_hosting
     # restart: always
-    image: wewo/image_hosting
-    links: 
-      - image_hosting_minio
     ports:
       - "3004:3004"
+    expose:
+      - "3004"
     tty: true
+    depends_on:
+      - image_hosting_minio
     networks:
       - wewo-net
   user_mongodb:
-    container_name: user_smongodb
+    container_name: user_mongodb
     # restart: always
     image: mongo
     ports:
-      - "4001:4001"
+      - "4001:27017"
+    expose:
+      - "27017"
     tty: true
     networks:
       - wewo-net
   note_mongodb:
-    container_name: note_smongodb
+    container_name: note_mongodb
     # restart: always
     image: mongo
     ports:
-      - "4002:4002"
+      - "4002:27017"
+    expose:
+      - "27017"
     tty: true
     networks:
       - wewo-net
   graph_mongodb:
-    container_name: graph_smongodb
+    container_name: graph_mongodb
     # restart: always
     image: mongo
     ports:
-      - "4003:4003"
+      - "4003:27017"
+    expose:
+      - "27017"
     tty: true
     networks:
       - wewo-net
@@ -98,13 +112,13 @@ services:
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: 12345678
-    command: ["server", "/data", "--console-address", ":4005"]
+    command: ["server", "/data", "--console-address", ":9001"]
     ports:
-      - "4004:4004"
-      - "4005:4005"
+      - "4004:9000"
+      - "4005:9001"
+    expose:
+      - "9000"
+      - "9001"
     tty: true
     networks:
       - wewo-net
-networks: 
-  wewo-net:
-    driver: bridge  

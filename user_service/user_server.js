@@ -11,7 +11,9 @@ var senecaWebConfig = {
 const seneca = require('seneca')()
     .use(SenecaWeb, senecaWebConfig)
     .use('entity')
-    .use(require('seneca-mongo-store'), { uri: 'mongodb://user_mongodb:4001/user_db' })
+    // .use(require('seneca-mongo-store'), { uri: 'mongodb://user_mongodb:27017/user_db' })
+    // .use(require('seneca-mongo-store'), { uri: 'mongodb://localhost:4001/user_db' })
+    .use(require('seneca-mongo-store'), { uri: 'mongodb://localhost:27017/user_db' })
     .use('./plugins/users')
     .listen({port:3001, type:'http'}) 
 

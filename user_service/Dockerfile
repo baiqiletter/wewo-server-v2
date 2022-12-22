@@ -19,4 +19,4 @@ COPY ./lib/intern.js ./node_modules/seneca-mongo-store/lib/intern.js
 COPY . .
 
 EXPOSE 3001
-CMD [ "node", "server.js" ]
+CMD [ "node", "user_server.js" ]

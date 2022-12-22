@@ -16,4 +16,4 @@ RUN npm ci --only=production
 COPY . .
 
 EXPOSE 3004
-CMD [ "node", "server.js" ]
+CMD [ "node", "image_hosting.js" ]
