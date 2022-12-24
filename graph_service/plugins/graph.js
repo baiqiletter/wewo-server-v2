@@ -1,9 +1,7 @@
 // 图谱服务插件
 
 const { MongoClient } = require("mongodb");
-// const uri = "mongodb://graph_mongodb:27017/";  // MongoDB Connection URI
-// const uri = "mongodb://localhost:4003/";  // MongoDB Connection URI
-const uri = "mongodb://localhost:27017/";  // MongoDB Connection URI
+const uri = "mongodb://graph-mongodb:27017/";  // MongoDB Connection URI
 const client = new MongoClient(uri);
 const collection = client.db("graph_db").collection("links")
 

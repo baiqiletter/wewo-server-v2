@@ -33,11 +33,6 @@ var seneca = require('seneca')()
 	.use( './plugins/note_service' )
 	.use( './plugins/graph_service' )
 
-	// .client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, host:'user_mongodb', port:ServiceList.user_service.port } )
-	// .client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, host:'note_mongodb', port:ServiceList.note_service.port } )
-	// .client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, host:'graph_mongodb', port:ServiceList.graph_service.port } )
-
-	.client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, port:ServiceList.user_service.port } )
-	.client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, port:ServiceList.note_service.port } )
-	.client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, port:ServiceList.graph_service.port } )
-
+	.client( { type:Protocol, pin:'service:'+ServiceList.user_service.name, host:'user-service', port:ServiceList.user_service.port } )
+	.client( { type:Protocol, pin:'service:'+ServiceList.note_service.name, host:'note-service', port:ServiceList.note_service.port } )
+	.client( { type:Protocol, pin:'service:'+ServiceList.graph_service.name, host:'graph-service', port:ServiceList.graph_service.port } )

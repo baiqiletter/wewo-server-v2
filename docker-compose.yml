@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 networks:
   wewo-net:
@@ -9,71 +9,76 @@ services:
     build: ./app/
     container_name: app
     # restart: always
+    image: wewo/app
     ports:
       - "3000:3000"
     expose:
       - "3000"
     depends_on:
-      - user_service
-      - note_service
-      - graph_service
+      - user-service
+      - note-service
+      - graph-service
     tty: true
     networks:
       - wewo-net
-  user_service:
+  user-service:
     build: ./user_service/
-    container_name: user_service
+    container_name: user-service
     # restart: always
+    image: wewo/user-service
     ports:
       - "3001:3001"
     expose:
       - "3001"
     tty: true
     depends_on:
-      - user_mongodb
+      - user-mongodb
     networks:
       - wewo-net
-  note_service:
+  note-service:
     build: ./note_service/
-    container_name: note_service
+    container_name: note-service
     # restart: always
+    image: wewo/note-service
     ports:
       - "3002:3002"
     expose:
       - "3002"
     tty: true
     depends_on:
-      - note_mongodb
+      - note-mongodb
     networks:
       - wewo-net
-  graph_service:
+  graph-service:
     build: ./graph_service/
-    container_name: graph_service
+    container_name: graph-service
     # restart: always
+    image: wewo/graph-service
     ports:
       - "3003:3003"
     expose:
       - "3003"
     tty: true
     depends_on:
-      - graph_mongodb
+      - graph-mongodb
     networks:
       - wewo-net
-  image_hosting:
+  image-hosting:
     build: ./image_hosting/
-    container_name: image_hosting
+    container_name: image-hosting
     # restart: always
+    image: wewo/image-hosting
     ports:
       - "3004:3004"
     expose:
       - "3004"
     tty: true
     depends_on:
-      - image_hosting_minio
+      - image-hosting-minio
     networks:
       - wewo-net
-  user_mongodb:
-    container_name: user_mongodb
+  user-mongodb:
+    container_name: user-mongodb
     # restart: always
     image: mongo
     ports:
@@ -83,8 +88,8 @@ services:
     tty: true
     networks:
       - wewo-net
-  note_mongodb:
-    container_name: note_mongodb
+  note-mongodb:
+    container_name: note-mongodb
     # restart: always
     image: mongo
     ports:
@@ -94,8 +99,8 @@ services:
     tty: true
     networks:
       - wewo-net
-  graph_mongodb:
-    container_name: graph_mongodb
+  graph-mongodb:
+    container_name: graph-mongodb
     # restart: always
     image: mongo
     ports:
@@ -105,8 +110,8 @@ services:
     tty: true
     networks:
       - wewo-net
-  image_hosting_minio:
-    container_name: image_hosting_minio
+  image-hosting-minio:
+    container_name: image-hosting-minio
     # restart: always
     image: minio/minio
     environment:

@@ -22,11 +22,8 @@ app.use(morgan('dev'));
 var Minio = require('minio')
 
 var minioClient = new Minio.Client({
-    // endPoint: 'image_hosting_minio',
-    // port: 9000,
-    endPoint: 'localhost',
+    endPoint: 'image-hosting-minio',
     port: 9000,
-    // port: 4004,
     useSSL: false,
     accessKey: 'minio',
     secretKey: '12345678'
@@ -38,9 +35,10 @@ const stringRandom = require('string-random')
 //start app 
 const port = process.env.PORT || 3004;
 
-app.listen(port, () => 
-  console.log(`App is listening on port ${port}.`)
-);
+app.listen(port, () => {
+    console.log(`App is listening on port ${port}.`)
+    console.log('connect to minio client...')
+});
 
 app.post('/image', async (req, res) => {
     // console.log(req)
