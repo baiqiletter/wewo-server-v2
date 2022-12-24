@@ -30,7 +30,8 @@ var minioClient = new Minio.Client({
 });
 
 var Fs = require('fs')
-const stringRandom = require('string-random')
+const stringRandom = require('string-random');
+const { clear } = require('console');
 
 //start app 
 const port = process.env.PORT || 3004;
@@ -39,6 +40,29 @@ app.listen(port, () => {
     console.log(`App is listening on port ${port}.`)
     console.log('connect to minio client...')
 });
+
+// create minio bucket if not exists
+var timer = setInterval(checkBucket, 1000)
+
+function checkBucket() {
+    minioClient.bucketExists('image', (err, exists) => {
+        if (err) return console.log('create bucket failed, retry later...')
+        console.log('check if bucket exists')
+
+        if (!exists) {
+            console.log('bucket image not exists in minio')
+            minioClient.makeBucket('image', (err) => {
+                if (err) return console.log('create bucket failed, retry later...')
+                console.log('bucket image created successfully')
+                clearInterval(timer)
+            })
+        }
+        else {
+            console.log('bucket image exists')
+            clearInterval(timer)
+        }
+    })
+}
 
 app.post('/image', async (req, res) => {
     // console.log(req)
