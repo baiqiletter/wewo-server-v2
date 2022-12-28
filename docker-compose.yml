@@ -8,7 +8,7 @@ services:
   app:
     build: ./app/
     container_name: app
-    # restart: always
+    restart: always
     image: wewo/app
     ports:
       - "3000:3000"
@@ -24,7 +24,7 @@ services:
   user-service:
     build: ./user_service/
     container_name: user-service
-    # restart: always
+    restart: always
     image: wewo/user-service
     ports:
       - "3001:3001"
@@ -38,7 +38,7 @@ services:
   note-service:
     build: ./note_service/
     container_name: note-service
-    # restart: always
+    restart: always
     image: wewo/note-service
     ports:
       - "3002:3002"
@@ -52,7 +52,7 @@ services:
   graph-service:
     build: ./graph_service/
     container_name: graph-service
-    # restart: always
+    restart: always
     image: wewo/graph-service
     ports:
       - "3003:3003"
@@ -66,7 +66,7 @@ services:
   image-hosting:
     build: ./image_hosting/
     container_name: image-hosting
-    # restart: always
+    restart: always
     image: wewo/image-hosting
     ports:
       - "3004:3004"
@@ -79,7 +79,7 @@ services:
       - wewo-net
   user-mongodb:
     container_name: user-mongodb
-    # restart: always
+    restart: always
     image: mongo
     ports:
       - "4001:27017"
@@ -90,7 +90,7 @@ services:
       - wewo-net
   note-mongodb:
     container_name: note-mongodb
-    # restart: always
+    restart: always
     image: mongo
     ports:
       - "4002:27017"
@@ -101,7 +101,7 @@ services:
       - wewo-net
   graph-mongodb:
     container_name: graph-mongodb
-    # restart: always
+    restart: always
     image: mongo
     ports:
       - "4003:27017"
@@ -112,7 +112,7 @@ services:
       - wewo-net
   image-hosting-minio:
     container_name: image-hosting-minio
-    # restart: always
+    restart: always
     image: minio/minio
     environment:
       MINIO_ROOT_USER: minio
