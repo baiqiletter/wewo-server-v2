@@ -108,7 +108,7 @@ export default {
                 response => {
                     // console.log(response)
                     insertImage({
-                        url: 'http://image-hosting:3004/image/' + response.data.image,
+                        url: 'http://' + document.domain + ':3004/image/' + response.data.image,
                         desc: 'img',
                     })
                 },
